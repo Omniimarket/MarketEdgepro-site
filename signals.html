@@ -135,6 +135,43 @@ fetch("marketproedge_signals.json")
   })
   .catch(err => console.error("Error loading signals:", err));
 </script>
+<script>
+fetch("marketproedge_signals.json")
+  .then(response => response.json())
+  .then(data => {
+    const tableBody = document.getElementById("tableBody");
+
+    Object.entries(data).forEach(([ticker, info]) => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${ticker}</td>
+        <td>${info.POC ?? "—"}</td>
+        <td>${info.POC_Move ?? "—"}</td>
+        <td>${info.VAL ?? "—"}</td>
+        <td>${info.VAH ?? "—"}</td>
+        <td>
+          <button title="${(info.Volume_Clusters || []).join(", ")}">🧠 Hover</button>
+        </td>
+        <td>${info.Near_VAL ? "✅" : ""}</td>
+        <td>${info.Near_VAH ? "✅" : ""}</td>
+        <td>
+          <button onclick="showChart('${ticker}')">📈 Chart</button>
+        </td>
+      `;
+
+      tableBody.appendChild(row);
+    });
+  })
+  .catch(error => {
+    console.error("Error loading signals:", error);
+  });
+
+// Placeholder chart function
+function showChart(ticker) {
+  alert(`Chart for ${ticker} coming soon!`);
+}
+</script>
 
 </body>
 </html>
