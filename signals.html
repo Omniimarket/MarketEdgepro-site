@@ -2,98 +2,105 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MarketProEdge – Signals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MarketProEdge - Daily Volume Profile Signals</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+    .signals-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.05);
+      overflow-x: auto;
     }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    table {
+
+    .signals-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
     }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: center;
+
+    .signals-table th, .signals-table td {
+      padding: 12px;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: left;
     }
-    th {
+
+    .signals-table th {
       background-color: #f5f5f5;
+      font-weight: 600;
     }
-    .at-val {
-      background-color: #ffe6e6;
+
+    .highlight-val {
+      background-color: #e0f7fa;
     }
-    .at-vah {
-      background-color: #e6f0ff;
-    }
-    .at-both {
-      background-color: #f0e6ff;
-    }
-    .tag {
-      display: inline-block;
-      padding: 3px 6px;
-      background: #ddd;
-      border-radius: 4px;
-      font-size: 12px;
+
+    .highlight-vah {
+      background-color: #fff3e0;
     }
   </style>
 </head>
 <body>
-  <h1>📊 MarketProEdge Daily Signals</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Ticker</th>
-        <th>POC (30D)</th>
-        <th>VAL</th>
-        <th>VAH</th>
-        <th>Near VAL</th>
-        <th>Near VAH</th>
-        <th>Volume Clusters</th>
-        <th>Gaps Above</th>
-        <th>Gaps Below</th>
-      </tr>
-    </thead>
-    <tbody id="signal-table"></tbody>
-  </table>
+  <header>
+    <div class="logo">MarketProEdge</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#">Features</a>
+      <a href="signals.html">Signals</a>
+      <a href="#">Pricing</a>
+      <a href="#">Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="signals-container">
+      <h2>📊 MarketProEdge Daily Signals</h2>
+      <table class="signals-table" id="signals-table">
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>POC</th>
+            <th>VAL</th>
+            <th>VAH</th>
+            <th>Near VAL</th>
+            <th>Near VAH</th>
+          </tr>
+        </thead>
+        <tbody id="signals-body">
+          <!-- Filled by JS -->
+        </tbody>
+      </table>
+    </div>
+  </main>
 
   <script>
-    fetch("marketproedge_signals.json")
+    fetch('marketproedge_signals.json')
       .then(res => res.json())
       .then(data => {
-        const tbody = document.getElementById("signal-table");
-        Object.entries(data).forEach(([symbol, info]) => {
-          const row = document.createElement("tr");
-          const atVal = info.at_val_d;
-          const atVah = info.at_vah_d;
+        const tbody = document.getElementById('signals-body');
+        Object.keys(data).forEach(ticker => {
+          const row = document.createElement('tr');
 
-          if (atVal && atVah) {
-            row.className = "at-both";
-          } else if (atVal) {
-            row.className = "at-val";
-          } else if (atVah) {
-            row.className = "at-vah";
-          }
+          const signal = data[ticker];
+          const isNearVal = signal.near_val ? '✅' : '';
+          const isNearVah = signal.near_vah ? '✅' : '';
 
           row.innerHTML = `
-            <td><strong>${symbol}</strong></td>
-            <td>${info.poc_long ?? "—"}</td>
-            <td>${info.val_d ?? "—"}</td>
-            <td>${info.vah_d ?? "—"}</td>
-            <td>${atVal ? "✅" : ""}</td>
-            <td>${atVah ? "✅" : ""}</td>
-            <td>${(info.clusters_long || []).length}</td>
-            <td>${(info.gapsAbove || []).slice(0, 3).join(", ")}</td>
-            <td>${(info.gapsBelow || []).slice(0, 3).join(", ")}</td>
+            <td>${ticker}</td>
+            <td>${signal.poc}</td>
+            <td>${signal.val}</td>
+            <td>${signal.vah}</td>
+            <td class="${signal.near_val ? 'highlight-val' : ''}">${isNearVal}</td>
+            <td class="${signal.near_vah ? 'highlight-vah' : ''}">${isNearVah}</td>
           `;
+
           tbody.appendChild(row);
         });
+      })
+      .catch(err => {
+        document.getElementById('signals-body').innerHTML = '<tr><td colspan="6">⚠️ Failed to load signals.</td></tr>';
+        console.error('Error loading signals:', err);
       });
   </script>
 </body>
