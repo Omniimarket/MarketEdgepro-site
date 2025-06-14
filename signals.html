@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>📊 MarketProEdge Daily Signals</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MarketProEdge Signals</title>
+  <link rel="stylesheet" href="style.css">
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
     }
     th, td {
-      padding: 8px 12px;
       border: 1px solid #ccc;
+      padding: 0.75rem;
       text-align: center;
     }
     th {
-      background-color: #f4f4f4;
+      background: #f5f5f5;
     }
     .tooltip {
       position: relative;
@@ -25,17 +28,17 @@
     }
     .tooltip .tooltiptext {
       visibility: hidden;
-      width: 200px;
+      width: 220px;
       background-color: #333;
       color: #fff;
-      text-align: left;
+      text-align: center;
+      border-radius: 4px;
       padding: 8px;
-      border-radius: 5px;
       position: absolute;
       z-index: 1;
       bottom: 125%;
       left: 50%;
-      margin-left: -100px;
+      margin-left: -110px;
       opacity: 0;
       transition: opacity 0.3s;
     }
@@ -43,70 +46,97 @@
       visibility: visible;
       opacity: 1;
     }
+    .chart-button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .chart-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .chart-modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%;
+      height: 400px;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">MarketProEdge</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="#">Features</a>
-      <a href="signals.html">Signals</a>
-      <a href="#">Pricing</a>
-      <a href="#">Login</a>
-    </nav>
-  </header>
 
-  <main>
-    <h1>📊 MarketProEdge Daily Signals</h1>
-    <table id="signals-table">
-      <thead>
-        <tr>
-          <th>Ticker</th>
-          <th>POC</th>
-          <th>POC Move</th>
-          <th>Signal</th>
-          <th>VAL</th>
-          <th>VAH</th>
-          <th>Volume Clusters</th>
-          <th>Near VAL</th>
-          <th>Near VAH</th>
-          <th>Chart</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </main>
+<h2>📊 MarketProEdge Daily Signals</h2>
+<table id="signals-table">
+  <thead>
+    <tr>
+      <th>Ticker</th>
+      <th>POC (30D)</th>
+      <th>POC Move</th>
+      <th>VAL</th>
+      <th>VAH</th>
+      <th>Volume Clusters</th>
+      <th>Near VAL</th>
+      <th>Near VAH</th>
+      <th>Chart</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-  <script>
-    fetch("marketproedge_signals.json")
-      .then(res => res.json())
-      .then(data => {
-        const tbody = document.querySelector("#signals-table tbody");
-        Object.entries(data).forEach(([ticker, d]) => {
-          const row = document.createElement("tr");
+<div id="chartModal" class="chart-modal">
+  <div class="chart-modal-content">
+    <span onclick="closeModal()" style="float:right; cursor:pointer;">&times;</span>
+    <h3>Chart coming soon...</h3>
+    <!-- You can embed a real chart here later -->
+  </div>
+</div>
 
-          const clusters = d.volumeClusters && d.volumeClusters.length
-            ? `<div class='tooltip'>🧠 Hover<span class='tooltiptext'>${d.volumeClusters.join(", ")}</span></div>`
-            : "—";
+<script>
+fetch('marketproedge_signals.json')
+  .then(response => response.json())
+  .then(data => {
+    const tbody = document.querySelector('#signals-table tbody');
+    data.forEach(row => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${row.ticker}</td>
+        <td>${row.poc ?? '—'}</td>
+        <td>${row.poc_movement ?? '—'}</td>
+        <td>${row.val ?? '—'}</td>
+        <td>${row.vah ?? '—'}</td>
+        <td>
+          <div class="tooltip">🧠 Hover
+            <div class="tooltiptext">${(row.volume_clusters || []).join('<br>') || 'None'}</div>
+          </div>
+        </td>
+        <td>${row.near_val ? '✅' : ''}</td>
+        <td>${row.near_vah ? '✅' : ''}</td>
+        <td><button class="chart-button" onclick="openModal('${row.ticker}')">📈 Chart</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  });
 
-          const signal = d.poc_movement ? (d.poc_movement > 0 ? "📈 Bullish" : d.poc_movement < 0 ? "📉 Bearish" : "➖ Flat") : "—";
+function openModal(ticker) {
+  document.getElementById('chartModal').style.display = 'block';
+  // In future, populate the modal with ticker-specific chart
+}
+function closeModal() {
+  document.getElementById('chartModal').style.display = 'none';
+}
+</script>
 
-          row.innerHTML = `
-            <td>${ticker}</td>
-            <td>${d.poc ?? "—"}</td>
-            <td>${d.poc_movement ?? "—"}</td>
-            <td>${signal}</td>
-            <td>${d.val ?? "—"}</td>
-            <td>${d.vah ?? "—"}</td>
-            <td>${clusters}</td>
-            <td>${d.near_val ? "✅" : ""}</td>
-            <td>${d.near_vah ? "✅" : ""}</td>
-            <td><a href="#">📈 Chart</a></td>
-          `;
-          tbody.appendChild(row);
-        });
-      });
-  </script>
 </body>
 </html>
