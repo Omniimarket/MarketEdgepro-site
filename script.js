@@ -40,32 +40,3 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch(error => console.error("❌ Error loading signals:", error));
 });
-
-function showChart(ticker, poc, val, vah) {
-  const ctx = document.getElementById("chartCanvas").getContext("2d");
-
-  if (window.currentChart) {
-    window.currentChart.destroy();
-  }
-
-  window.currentChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: ["POC", "VAL", "VAH"],
-      datasets: [{
-        label: ticker + " Volume Profile",
-        data: [poc, val, vah],
-        backgroundColor: ["#1d4ed8", "#facc15", "#f87171"]
-      }]
-    },
-    options: {
-      responsive: true
-    }
-  });
-
-  document.getElementById("chartModal").style.display = "block";
-}
-
-document.querySelector(".close").addEventListener("click", function () {
-  document.getElementById("chartModal").style.display = "none";
-});
