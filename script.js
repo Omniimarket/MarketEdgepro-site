@@ -12,25 +12,26 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       console.log("Fetched JSON Data:", data);
       
-      // Render ticker boxes
+      // Get the container for ticker boxes
       const tickerContainer = document.getElementById("tickerContainer");
       tickerContainer.innerHTML = ""; // Clear any existing content
 
+      // Iterate over each ticker
       Object.keys(data).forEach(ticker => {
         const info = data[ticker];
         console.log("Processing ticker:", ticker, info);
 
-        // Optionally skip data that is empty
+        // Skip if data is empty (optional)
         if (Object.keys(info).length === 0) {
           console.warn(`No data available for ${ticker}.`);
           return;
         }
 
-        // Create a ticker box element
+        // Create a new ticker box element
         const box = document.createElement("div");
         box.classList.add("ticker-box");
 
-        // Use the original keys from the JSON data for now:
+        // Populate the box with information and a button to view the chart
         box.innerHTML = `
           <h3>${ticker}</h3>
           <p><strong>Point of Control (1H):</strong> ${info.POC_1h ?? "No Data"}</p>
@@ -39,25 +40,28 @@ document.addEventListener("DOMContentLoaded", function () {
           <p><strong>Point of Control (Daily):</strong> ${info.POC_1day ?? "No Data"}</p>
           <p><strong>Upper Trading Level (Daily):</strong> ${info.VAH_1day ?? "No Data"}</p>
           <p><strong>Lower Trading Level (Daily):</strong> ${info.VAL_1day ?? "No Data"}</p>
+          <button class="view-chart">View Chart</button>
         `;
+
+        // Add an event listener to the button inside this ticker box
+        box.querySelector("button.view-chart").addEventListener("click", function () {
+          drawChart(ticker, info);
+        });
+
+        // Append the box to the container
         tickerContainer.appendChild(box);
       });
-
-      // For example, draw the chart for AAPL if that data exists.
-      if (data["AAPL"]) {
-        drawChart("AAPL", data["AAPL"]);
-      }
     })
     .catch(error => {
       console.error("❌ Error loading signals:", error);
     });
 
-  // Function to draw a chart with Chart.js using data for a given ticker.
+  // Function to draw (or update) a Chart.js bar chart for a given ticker.
   function drawChart(ticker, info) {
-    // Get the context of the canvas element where the chart will be drawn.
+    // Get the canvas context
     const ctx = document.getElementById('myChart').getContext('2d');
 
-    // Prepare the chart data.
+    // Prepare the chart data: two datasets for 1H and Daily values
     const chartData = {
       labels: ["Point of Control", "Upper Trading Level", "Lower Trading Level"],
       datasets: [
@@ -74,13 +78,13 @@ document.addEventListener("DOMContentLoaded", function () {
       ]
     };
 
-    // If a chart instance already exists, destroy it first so as not to overlap.
+    // If there is an existing chart instance, destroy it first.
     if (window.myChartInstance) {
       window.myChartInstance.destroy();
     }
 
-    // Create a new bar chart using Chart.js.
-    const myChart = new Chart(ctx, {
+    // Create a new bar chart
+    window.myChartInstance = new Chart(ctx, {
       type: 'bar',
       data: chartData,
       options: {
@@ -93,8 +97,5 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     });
-
-    // Save the chart instance globally so we can destroy it later if needed.
-    window.myChartInstance = myChart;
   }
 });
