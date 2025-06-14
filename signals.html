@@ -142,7 +142,7 @@
     </div>
   </div>
 
- <script>
+<script>
   console.log("Fetching JSON data…");
 
   fetch("marketproedge_signals.json")
@@ -154,13 +154,24 @@
     })
     .then(data => {
       console.log("Fetched Data:", data);
-      let signalsArray;
-      
-      // Check if the returned data is an array, or if it's wrapped in an object
+      let signalsArray = [];
+
+      // Check if data is an array or an object
       if (Array.isArray(data)) {
         signalsArray = data;
-      } else if (Array.isArray(data.signals)) {
-        signalsArray = data.signals;
+      } else if (typeof data === 'object' && data !== null) {
+        // Convert the object into an array where each element includes the ticker.
+        signalsArray = Object.entries(data).map(([ticker, details]) => {
+          return {
+            ticker,
+            // We're mapping keys from your JSON to our expected output.
+            POC: details.poc !== undefined ? details.poc : "—",
+            Gaps_Above: details.gapsAbove || [],
+            Gaps_Below: details.gapsBelow || [],
+            Volume_Clusters: details.volumeClusters || [],
+            // You can add other fields if needed. Adjust the field names if required.
+          };
+        });
       } else {
         console.error("No valid signals array found in JSON", data);
         return;
@@ -174,9 +185,9 @@
         row.innerHTML = `
           <td>${info.ticker}</td>
           <td>${info.POC !== null ? info.POC : "—"}</td>
-          <td>${info.POC_Move !== null ? info.POC_Move : "—"}</td>
-          <td>${info.VAL !== null ? info.VAL : "—"}</td>
-          <td>${info.VAH !== null ? info.VAH : "—"}</td>
+          <td>${typeof info.POC_Move !== "undefined" ? info.POC_Move : "—"}</td>
+          <td>${typeof info.VAL !== "undefined" ? info.VAL : "—"}</td>
+          <td>${typeof info.VAH !== "undefined" ? info.VAH : "—"}</td>
           <td>
             <button class="tooltip">🧠 Hover
               <span class="tooltiptext">${(info.Volume_Clusters || []).join(", ")}</span>
@@ -184,8 +195,8 @@
           </td>
           <td>${(info.Gaps_Above || []).join(", ") || "—"}</td>
           <td>${(info.Gaps_Below || []).join(", ") || "—"}</td>
-          <td>${info.Near_VAL !== null ? "✅" : ""}</td>
-          <td>${info.Near_VAH !== null ? "✅" : ""}</td>
+          <td>${info.Near_VAL !== undefined && info.Near_VAL !== null ? "✅" : ""}</td>
+          <td>${info.Near_VAH !== undefined && info.Near_VAH !== null ? "✅" : ""}</td>
           <td>
             <button onclick="showChart('${info.ticker}')">📈 Chart</button>
           </td>
@@ -202,6 +213,7 @@
     alert(`Chart for ${ticker} coming soon!`);
   }
 </script>
+
 
 
 </body>
