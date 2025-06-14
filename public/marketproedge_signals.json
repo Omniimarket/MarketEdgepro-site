@@ -22,41 +22,5 @@
     "Gaps_Below": [444.45, 439.45],
     "Near_VAL": null,
     "Near_VAH": null
-  },
-  {
-    "ticker": "TSLA",
-    "POC": 342.83,
-    "POC_Move": 16.77,
-    "VAL": 277.17,
-    "VAH": 361.07,
-    "Volume_Clusters": [341.33, 341.83, 342.33],
-    "Gaps_Above": [347.83, 352.83],
-    "Gaps_Below": [337.83, 332.83],
-    "Near_VAL": null,
-    "Near_VAH": null
-  },
-  {
-    "ticker": "NVDA",
-    "POC": 135.17,
-    "POC_Move": -7.5,
-    "VAL": 114.2,
-    "VAH": 144.34,
-    "Volume_Clusters": [133.67, 134.17, 134.67],
-    "Gaps_Above": [140.17, 145.17],
-    "Gaps_Below": [130.17, 125.17],
-    "Near_VAL": null,
-    "Near_VAH": null
-  },
-  {
-    "ticker": "AMZN",
-    "POC": 206.06,
-    "POC_Move": -7.07,
-    "VAL": 185.69,
-    "VAH": 216.93,
-    "Volume_Clusters": [204.56, 205.06, 205.56],
-    "Gaps_Above": [211.06, 216.06],
-    "Gaps_Below": [201.06, 196.06],
-    "Near_VAL": null,
-    "Near_VAH": null
   }
 ]
