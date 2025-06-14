@@ -2,49 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MarketProEdge Signals</title>
+  <title>MarketProEdge – Signals</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
+      font-size: 14px;
     }
     th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
+      border: 1px solid #ddd;
+      padding: 10px;
       text-align: center;
     }
-    .highlight-val { background-color: #ffe3e3; }
-    .highlight-vah { background-color: #e3f0ff; }
+    th {
+      background-color: #f5f5f5;
+    }
+    .at-val {
+      background-color: #ffe6e6;
+    }
+    .at-vah {
+      background-color: #e6f0ff;
+    }
+    .at-both {
+      background-color: #f0e6ff;
+    }
+    .tag {
+      display: inline-block;
+      padding: 3px 6px;
+      background: #ddd;
+      border-radius: 4px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">MarketProEdge</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="#">Features</a>
-      <a href="signals.html">Signals</a>
-      <a href="#">Pricing</a>
-    </nav>
-  </header>
-
-  <section>
-    <h1>Daily Volume Profile Signals</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Ticker</th>
-          <th>POC</th>
-          <th>VAL</th>
-          <th>VAH</th>
-          <th>At VAL?</th>
-          <th>At VAH?</th>
-        </tr>
-      </thead>
-      <tbody id="signal-table"></tbody>
-    </table>
-  </section>
+  <h1>📊 MarketProEdge Daily Signals</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Ticker</th>
+        <th>POC (30D)</th>
+        <th>VAL</th>
+        <th>VAH</th>
+        <th>Near VAL</th>
+        <th>Near VAH</th>
+        <th>Volume Clusters</th>
+        <th>Gaps Above</th>
+        <th>Gaps Below</th>
+      </tr>
+    </thead>
+    <tbody id="signal-table"></tbody>
+  </table>
 
   <script>
     fetch("marketproedge_signals.json")
@@ -53,15 +70,27 @@
         const tbody = document.getElementById("signal-table");
         Object.entries(data).forEach(([symbol, info]) => {
           const row = document.createElement("tr");
-          if (info.at_val_d) row.classList.add("highlight-val");
-          if (info.at_vah_d) row.classList.add("highlight-vah");
+          const atVal = info.at_val_d;
+          const atVah = info.at_vah_d;
+
+          if (atVal && atVah) {
+            row.className = "at-both";
+          } else if (atVal) {
+            row.className = "at-val";
+          } else if (atVah) {
+            row.className = "at-vah";
+          }
+
           row.innerHTML = `
-            <td>${symbol}</td>
-            <td>${info.poc_long}</td>
-            <td>${info.val_d}</td>
-            <td>${info.vah_d}</td>
-            <td>${info.at_val_d ? "✅" : ""}</td>
-            <td>${info.at_vah_d ? "✅" : ""}</td>
+            <td><strong>${symbol}</strong></td>
+            <td>${info.poc_long ?? "—"}</td>
+            <td>${info.val_d ?? "—"}</td>
+            <td>${info.vah_d ?? "—"}</td>
+            <td>${atVal ? "✅" : ""}</td>
+            <td>${atVah ? "✅" : ""}</td>
+            <td>${(info.clusters_long || []).length}</td>
+            <td>${(info.gapsAbove || []).slice(0, 3).join(", ")}</td>
+            <td>${(info.gapsBelow || []).slice(0, 3).join(", ")}</td>
           `;
           tbody.appendChild(row);
         });
