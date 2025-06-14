@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("Script.js is running on signals page.");
 
   // Adjust the fetch path to match the location of your JSON file.
-  fetch("/public/marketproedge.signals.json")
+  fetch("/marketproedge.signals.json")
     .then(response => {
       if (!response.ok) {
         throw new Error("Network response was not okay: " + response.statusText);
