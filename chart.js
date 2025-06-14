@@ -1,30 +1,29 @@
-function showChart(ticker) {
+function showChart(ticker, poc, val, vah) {
   const ctx = document.getElementById("chartCanvas").getContext("2d");
 
-  // Dummy data for now (fetch real data later)
-  const data = {
-    labels: ["POC", "VAL", "VAH"],
-    datasets: [{
-      label: ticker + " Volume Profile",
-      data: [200, 195, 212], // Replace with actual ticker data
-      backgroundColor: ["#1d4ed8", "#facc15", "#f87171"]
-    }]
-  };
+  // Ensure the modal is visible
+  document.getElementById("chartModal").style.display = "block";
 
-  // Destroy previous chart instance
+  // Destroy previous chart instance if it exists
   if (window.currentChart) {
     window.currentChart.destroy();
   }
 
+  // Create new chart instance
   window.currentChart = new Chart(ctx, {
     type: "bar",
-    data,
+    data: {
+      labels: ["POC", "VAL", "VAH"],
+      datasets: [{
+        label: ticker + " Volume Profile",
+        data: [poc, val, vah],
+        backgroundColor: ["#1d4ed8", "#facc15", "#f87171"]
+      }]
+    },
     options: {
       responsive: true
     }
   });
-
-  document.getElementById("chartModal").style.display = "block";
 }
 
 // Close modal function
