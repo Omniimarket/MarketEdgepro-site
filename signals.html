@@ -44,26 +44,30 @@
 
   <script>
     fetch("/marketproedge_signals.json")
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
       .then(data => {
         const tbody = document.getElementById("signalTable");
-
         Object.entries(data).forEach(([ticker, info]) => {
           const row = document.createElement("tr");
-          row.innerHTML = \`
-            <td><strong>\${ticker}</strong></td>
-            <td>\${info.poc}</td>
-            <td>\${info.gapsAbove.join(", ")}</td>
-            <td>\${info.gapsBelow.join(", ")}</td>
-            <td>\${info.volumeClusters.slice(0, 10).join(", ")} ...</td>
-          \`;
+          row.innerHTML = `
+            <td><strong>${ticker}</strong></td>
+            <td>${info.poc}</td>
+            <td>${info.gapsAbove.join(", ") || "—"}</td>
+            <td>${info.gapsBelow.join(", ") || "—"}</td>
+            <td>${info.volumeClusters.slice(0, 10).join(", ")}...</td>
+          `;
           tbody.appendChild(row);
         });
       })
       .catch(err => {
+        console.error("Failed to load JSON:", err);
         document.getElementById("signalTable").innerHTML =
-          '<tr><td colspan=\"5\" style=\"color:red;\">Failed to load signal data.</td></tr>';
-        console.error(err);
+          '<tr><td colspan="5" style="color:red;">⚠️ Failed to load signal data.</td></tr>';
       });
   </script>
 </body>
