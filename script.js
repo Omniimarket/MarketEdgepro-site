@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       console.log("Fetched JSON Data:", data);
 
-      // Ensure data is an array
+      // Convert JSON array into usable format
       if (!Array.isArray(data)) {
-        console.error("Expected array but received:", typeof data, data);
+        console.error("Expected an array but received:", typeof data, data);
         return;
       }
 
