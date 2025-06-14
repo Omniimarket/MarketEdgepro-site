@@ -152,14 +152,14 @@ fetch("marketproedge_signals.json")
       row.innerHTML = `
         <td>${ticker}</td>
         <td>${info.poc ?? "—"}</td>
-        <td>${info.poc_move ?? "—"}</td>
+        <td>${info.pocMove ?? "—"}</td>
         <td>${info.val ?? "—"}</td>
         <td>${info.vah ?? "—"}</td>
         <td>
           <button title="${(info.volumeClusters || []).join(", ")}">🧠 Hover</button>
         </td>
-        <td>${info.near_VAL ? "✅" : ""}</td>
-        <td>${info.near_VAH ? "✅" : ""}</td>
+        <td>${info.nearVAL ? "✅" : ""}</td>
+        <td>${info.nearVAH ? "✅" : ""}</td>
         <td>
           <button onclick="showChart('${ticker}')">📈 Chart</button>
         </td>
@@ -176,6 +176,7 @@ function showChart(ticker) {
   alert(`Chart for ${ticker} coming soon!`);
 }
 </script>
+
 
 </body>
 </html>
