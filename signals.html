@@ -1,4 +1,3 @@
-<!-- signals.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,11 +90,13 @@
             ? `<div class='tooltip'>🧠 Hover<span class='tooltiptext'>${d.volumeClusters.join(", ")}</span></div>`
             : "—";
 
+          const signal = d.poc_movement ? (d.poc_movement > 0 ? "📈 Bullish" : d.poc_movement < 0 ? "📉 Bearish" : "➖ Flat") : "—";
+
           row.innerHTML = `
             <td>${ticker}</td>
             <td>${d.poc ?? "—"}</td>
             <td>${d.poc_movement ?? "—"}</td>
-            <td>${d.signal_movement ?? "—"}</td>
+            <td>${signal}</td>
             <td>${d.val ?? "—"}</td>
             <td>${d.vah ?? "—"}</td>
             <td>${clusters}</td>
