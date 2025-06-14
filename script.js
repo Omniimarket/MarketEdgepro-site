@@ -4,27 +4,34 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       console.log("Fetched JSON Data:", data);
 
-      // Convert JSON array into usable format
-      if (!Array.isArray(data)) {
-        console.error("Expected an array but received:", typeof data, data);
-        return;
-      }
+      // Convert JSON object into an array
+      const signalsArray = Object.keys(data).map(ticker => ({
+        ticker,
+        POC: data[ticker].poc ?? "No Data",
+        POC_Move: data[ticker].pocMove ?? "No Data",
+        VAL: data[ticker].val ?? "No Data",
+        VAH: data[ticker].vah ?? "No Data",
+        Gaps_Above: data[ticker].gapsAbove?.join(", ") || "No Data",
+        Gaps_Below: data[ticker].gapsBelow?.join(", ") || "No Data"
+      }));
+
+      console.log("Processed Data for Display:", signalsArray);
 
       const tickerContainer = document.getElementById("tickerContainer");
       tickerContainer.innerHTML = ""; // Clear previous content
 
-      data.forEach(info => {
+      signalsArray.forEach(info => {
         const box = document.createElement("div");
         box.classList.add("ticker-box");
 
         box.innerHTML = `
           <h3>${info.ticker}</h3>
-          <p><strong>POC:</strong> ${info.POC ?? "No Data"}</p>
-          <p><strong>POC Move:</strong> ${info.POC_Move ?? "No Data"}</p>
-          <p><strong>VAL:</strong> ${info.VAL ?? "No Data"}</p>
-          <p><strong>VAH:</strong> ${info.VAH ?? "No Data"}</p>
-          <p><strong>Gaps Above:</strong> ${info.Gaps_Above?.join(", ") || "No Data"}</p>
-          <p><strong>Gaps Below:</strong> ${info.Gaps_Below?.join(", ") || "No Data"}</p>
+          <p><strong>POC:</strong> ${info.POC}</p>
+          <p><strong>POC Move:</strong> ${info.POC_Move}</p>
+          <p><strong>VAL:</strong> ${info.VAL}</p>
+          <p><strong>VAH:</strong> ${info.VAH}</p>
+          <p><strong>Gaps Above:</strong> ${info.Gaps_Above}</p>
+          <p><strong>Gaps Below:</strong> ${info.Gaps_Below}</p>
         `;
 
         tickerContainer.appendChild(box);
