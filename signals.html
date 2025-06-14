@@ -3,41 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MarketProEdge - Daily Volume Profile Signals</title>
+  <title>MarketProEdge - Daily Signals</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    .signals-container {
-      max-width: 1200px;
-      margin: 3rem auto;
-      padding: 1rem;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 0 16px rgba(0, 0, 0, 0.05);
-      overflow-x: auto;
-    }
-
-    .signals-table {
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
       width: 100%;
-      border-collapse: collapse;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
     }
-
-    .signals-table th, .signals-table td {
-      padding: 12px;
-      border-bottom: 1px solid #e0e0e0;
-      text-align: left;
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 10px;
+      position: relative;
     }
-
-    .signals-table th {
-      background-color: #f5f5f5;
-      font-weight: 600;
-    }
-
-    .highlight-val {
-      background-color: #e0f7fa;
-    }
-
-    .highlight-vah {
-      background-color: #fff3e0;
+    .close {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -46,111 +43,115 @@
     <div class="logo">MarketProEdge</div>
     <nav>
       <a href="index.html">Home</a>
-      <a href="#">Features</a>
+      <a href="#features">Features</a>
       <a href="signals.html">Signals</a>
-      <a href="#">Pricing</a>
+      <a href="#pricing">Pricing</a>
       <a href="#">Login</a>
     </nav>
   </header>
 
-  <main>
-    <div class="signals-container">
-      <h2>📊 MarketProEdge Daily Signals</h2>
-      <table class="signals-table" id="signals-table">
-        <thead>
-          <tr>
-            <th>Ticker</th>
-            <th>POC</th>
-            <th>VAL</th>
-            <th>VAH</th>
-            <th>Volume Clusters</th>
-            <th>Near VAL</th>
-            <th>Near VAH</th>
-          </tr>
-        </thead>
-        <tbody id="signals-body">
-          <!-- Filled by JS -->
-        </tbody>
-      </table>
+  <section class="hero">
+    <h1>📊 MarketProEdge Daily Signals</h1>
+    <p>Volume Profile data updated daily: POC, VAL/VAH, Gaps, and more.</p>
+  </section>
+
+  <section class="signals">
+    <table>
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th>POC</th>
+          <th>POC Move</th>
+          <th>VAL</th>
+          <th>VAH</th>
+          <th>Volume Clusters</th>
+          <th>Near VAL</th>
+          <th>Near VAH</th>
+          <th>Chart</th>
+        </tr>
+      </thead>
+      <tbody id="signalTable"></tbody>
+    </table>
+  </section>
+
+  <div id="chartModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <canvas id="tickerChart" width="400" height="300"></canvas>
     </div>
-  </main>
+  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-fetch('marketproedge_signals.json')
-  .then(res => res.json())
-  .then(data => {
-    const tbody = document.getElementById('signals-body');
+  <footer>
+    &copy; 2025 MarketProEdge. All rights reserved.
+  </footer>
 
-    Object.keys(data).forEach(ticker => {
-      const s = data[ticker];
-      const isNearVal = s.near_val ? '✅' : '';
-      const isNearVah = s.near_vah ? '✅' : '';
-      const volTip = s.volume_clusters && s.volume_clusters.length
-        ? s.volume_clusters.join(', ')
-        : 'No clusters';
+  <script>
+    let signals = {};
 
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${ticker}</td>
-        <td>${s.poc}</td>
-        <td>${s.val}</td>
-        <td>${s.vah}</td>
-        <td class="${s.near_val ? 'highlight-val' : ''}">${isNearVal}</td>
-        <td class="${s.near_vah ? 'highlight-vah' : ''}">${isNearVah}</td>
-        <td><span title="${volTip}">🧠 Hover</span></td>
-        <td><button onclick="openChart('${ticker}', ${s.poc}, ${JSON.stringify(s.volume_clusters)})">📈 Chart</button></td>
-      `;
-      tbody.appendChild(row);
-    });
-  });
+    fetch('marketproedge_signals.json')
+      .then(response => response.json())
+      .then(data => {
+        signals = data;
+        const table = document.getElementById("signalTable");
 
-function openChart(ticker, poc, clusters) {
-  const ctx = document.getElementById('chartCanvas').getContext('2d');
-  if (window.pocChart) window.pocChart.destroy();
+        Object.keys(data).forEach(ticker => {
+          const row = document.createElement("tr");
+          const d = data[ticker];
+          const pocMove = d.poc_movement || "–";
+          const pocSymbol = pocMove === "up" ? "📈" : pocMove === "down" ? "📉" : "➖";
 
-  window.pocChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: clusters,
-      datasets: [{
-        label: `Volume Clusters for ${ticker}`,
-        data: clusters.map(() => Math.random() * 100), // Fake volume
-        backgroundColor: 'rgba(54, 162, 235, 0.5)'
-      }]
-    },
-    options: {
-      scales: {
-        x: { title: { display: true, text: 'Price Level' } },
-        y: { title: { display: true, text: 'Relative Volume' } }
-      },
-      plugins: {
-        annotation: {
-          annotations: {
-            line1: {
-              type: 'line',
-              xMin: poc,
-              xMax: poc,
-              borderColor: 'red',
-              borderWidth: 2,
-              label: {
-                content: 'POC',
-                enabled: true,
-                position: 'end'
-              }
-            }
+          const volumeClusters = d.volume_clusters || [];
+          const clusterText = volumeClusters.length ? "🧠 Hover" : "—";
+
+          const nearVal = d.near_val ? "✅" : "";
+          const nearVah = d.near_vah ? "✅" : "";
+
+          row.innerHTML = `
+            <td>${ticker}</td>
+            <td>${d.poc ?? "—"}</td>
+            <td title="${pocMove}">${pocSymbol}</td>
+            <td>${d.val ?? "—"}</td>
+            <td>${d.vah ?? "—"}</td>
+            <td title="${volumeClusters.join(', ')}">${clusterText}</td>
+            <td>${nearVal}</td>
+            <td>${nearVah}</td>
+            <td><button onclick="openChart('${ticker}')">📈 Chart</button></td>
+          `;
+          table.appendChild(row);
+        });
+      });
+
+    function openChart(ticker) {
+      const d = signals[ticker];
+      if (!d || !d.volume_clusters || d.volume_clusters.length === 0) return;
+
+      const ctx = document.getElementById("tickerChart").getContext("2d");
+      if (window.currentChart) window.currentChart.destroy();
+
+      window.currentChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: d.volume_clusters.map(String),
+          datasets: [{
+            label: `Volume Clusters - ${ticker}`,
+            data: d.volume_clusters.map(() => Math.floor(Math.random() * 100)), // Placeholder heights
+            backgroundColor: "rgba(0,123,255,0.6)"
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
           }
         }
-      }
-    }
-  });
+      });
 
-  document.getElementById('chartModal').style.display = 'block';
-}
-</script>
-<div id="chartModal" style="display:none; position:fixed; top:10%; left:10%; width:80%; height:80%; background:#fff; border:1px solid #ccc; z-index:1000; padding:1rem; box-shadow:0 0 20px rgba(0,0,0,0.3);">
-  <canvas id="chartCanvas" style="width:100%; height:90%"></canvas>
-  <br><button onclick="document.getElementById('chartModal').style.display='none'">Close</button>
-</div>
+      document.getElementById("chartModal").style.display = "block";
+    }
+
+    document.getElementById("closeModal").onclick = function () {
+      document.getElementById("chartModal").style.display = "none";
+    };
+  </script>
 </body>
 </html>
