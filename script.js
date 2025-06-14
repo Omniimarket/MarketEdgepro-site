@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Script.js is running on signals page.");
 
-  // Use a relative path since the JSON file is published at the same level.
+  // Use a relative path to load the JSON file
   fetch("./marketproedge_signals.json")
     .then(response => {
       if (!response.ok) {
@@ -12,37 +12,37 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       console.log("Fetched JSON Data:", data);
       
-      // Get the container for ticker boxes
+      // Get the container where ticker boxes will be appended
       const tickerContainer = document.getElementById("tickerContainer");
-      tickerContainer.innerHTML = ""; // Clear existing content
+      tickerContainer.innerHTML = ""; // Clear any existing content
 
-      // Iterate over each ticker in the JSON object
+      // Iterate through each ticker in the JSON object
       Object.keys(data).forEach(ticker => {
         const info = data[ticker];
         console.log("Processing ticker:", ticker, info);
 
-        // Skip rendering if info is empty (handle missing data gracefully)
+        // Optionally skip tickers that have no data, e.g., an empty object
         if (Object.keys(info).length === 0) {
           console.warn(`No data available for ${ticker}.`);
           return;
         }
 
-        // Create a new ticker box element
+        // Create a box element to display the ticker data
         const box = document.createElement("div");
         box.classList.add("ticker-box");
 
-        // Use original JSON keys to display the data
+        // Update the text labels here from "Central Price" to "Point of Control"
         box.innerHTML = `
           <h3>${ticker}</h3>
-          <p><strong>Central Price (1H):</strong> ${info.POC_1h ?? "No Data"}</p>
+          <p><strong>Point of Control (1H):</strong> ${info.POC_1h ?? "No Data"}</p>
           <p><strong>Upper Trading Level (1H):</strong> ${info.VAH_1h ?? "No Data"}</p>
           <p><strong>Lower Trading Level (1H):</strong> ${info.VAL_1h ?? "No Data"}</p>
-          <p><strong>Central Price (Daily):</strong> ${info.POC_1day ?? "No Data"}</p>
+          <p><strong>Point of Control (Daily):</strong> ${info.POC_1day ?? "No Data"}</p>
           <p><strong>Upper Trading Level (Daily):</strong> ${info.VAH_1day ?? "No Data"}</p>
           <p><strong>Lower Trading Level (Daily):</strong> ${info.VAL_1day ?? "No Data"}</p>
         `;
-
-        // Append the new element to the container
+        
+        // Append the new box to the ticker container
         tickerContainer.appendChild(box);
       });
     })
