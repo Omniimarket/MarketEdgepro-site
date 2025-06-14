@@ -7,103 +7,22 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f9f9f9;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #111;
-      padding: 10px 20px;
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header .logo {
-      font-size: 1.2rem;
-    }
-    nav a {
-      color: #fff;
-      margin-left: 15px;
-      text-decoration: none;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px auto;
-      max-width: 1000px;
-      background: #fff;
-    }
-    th, td {
-      padding: 8px;
-      border: 1px solid #ddd;
-      text-align: center;
-    }
-    th {
-      background-color: #f0f0f0;
-    }
-    .tooltip {
-      position: relative;
-      cursor: pointer;
-    }
-    .tooltip .tooltiptext {
-      visibility: hidden;
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 5px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      left: 50%;
-      margin-left: -60px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .tooltip:hover .tooltiptext {
-      visibility: visible;
-      opacity: 1;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.8);
-    }
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 90%;
-      max-width: 700px;
-    }
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-    .close:hover, .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
+    body { font-family: sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
+    header { background: #111; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+    header .logo { font-size: 1.2rem; color: #fff; }
+    nav a { color: #fff; margin-left: 15px; text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+    table { width: 100%; max-width: 1000px; margin: 20px auto; border-collapse: collapse; background: #fff; }
+    th, td { padding: 8px; border: 1px solid #ddd; text-align: center; }
+    th { background-color: #f0f0f0; }
+    .tooltip { position: relative; cursor: pointer; }
+    .modal { display: none; position: fixed; z-index: 999; left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgba(0,0,0,0.8); }
+    .modal-content { background: #fff; margin: 10% auto; padding: 20px; width: 90%; max-width: 700px; }
+    .close { color: #aaa; float: right; font-size: 28px; cursor: pointer; }
+    .close:hover, .close:focus { color: #000; }
   </style>
 </head>
 <body>
-
   <header>
     <div class="logo">📊 MarketProEdge</div>
     <nav>
@@ -114,19 +33,12 @@
   </header>
 
   <main>
-    <h2 style="text-align: center; margin-top: 20px;">Daily Signals</h2>
-    <table id="signalsTable">
+    <h2 style="text-align:center;margin-top:20px;">Daily Signals</h2>
+    <table>
       <thead>
         <tr>
-          <th>Ticker</th>
-          <th>POC</th>
-          <th>POC Move</th>
-          <th>VAL</th>
-          <th>VAH</th>
-          <th>Volume Clusters</th>
-          <th>Near VAL</th>
-          <th>Near VAH</th>
-          <th>Chart</th>
+          <th>Ticker</th><th>POC</th><th>POC Move</th><th>VAL</th><th>VAH</th>
+          <th>Volume Clusters</th><th>Near VAL</th><th>Near VAH</th><th>Chart</th>
         </tr>
       </thead>
       <tbody id="tableBody"></tbody>
@@ -140,45 +52,32 @@
     </div>
   </div>
 
-<script>
-fetch("marketproedge_signals.json")
-  .then(response => response.json())
-  .then(data => {
-    const tableBody = document.getElementById("tableBody");
+  <script>
+    fetch("marketproedge_signals.json")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById("tableBody");
+        data.forEach(info => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${info.ticker}</td>
+            <td>${info.POC ?? "—"}</td>
+            <td>${info.POC_Move ?? "—"}</td>
+            <td>${info.VAL ?? "—"}</td>
+            <td>${info.VAH ?? "—"}</td>
+            <td><button title="${info.Volume_Clusters?.join(", ")}">🧠 Hover</button></td>
+            <td>${info.Near_VAL ? "✅" : ""}</td>
+            <td>${info.Near_VAH ? "✅" : ""}</td>
+            <td><button onclick="showChart('${info.ticker}')">📈 Chart</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      })
+      .catch(err => console.error("❌ Failed to load signals", err));
 
-    data.forEach(info => {
-      const row = document.createElement("tr");
-
-      row.innerHTML = `
-        <td>${info.ticker}</td>
-        <td>${info.POC ?? "—"}</td>
-        <td>${info.POC_Move ?? "—"}</td>
-        <td>${info.VAL ?? "—"}</td>
-        <td>${info.VAH ?? "—"}</td>
-        <td>
-          <button title="${(info.Volume_Clusters || []).join(", ")}">🧠 Hover</button>
-        </td>
-        <td>${info.Near_VAL ? "✅" : ""}</td>
-        <td>${info.Near_VAH ? "✅" : ""}</td>
-        <td>
-          <button onclick="showChart('${info.ticker}')">📈 Chart</button>
-        </td>
-      `;
-
-      tableBody.appendChild(row);
-    });
-  })
-  .catch(error => {
-    console.error("❌ Error loading signals:", error);
-  });
-
-function showChart(ticker) {
-  alert(`Chart for ${ticker} coming soon!`);
-}
-</script>
-
-
-
-
+    function showChart(ticker) {
+      alert(`📈 Chart for ${ticker} coming soon!`);
+    }
+  </script>
 </body>
 </html>
