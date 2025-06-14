@@ -4,34 +4,26 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       console.log("Fetched JSON Data:", data);
 
-      // Convert JSON object into an array
-      const signalsArray = Object.keys(data).map(ticker => ({
-        ticker,
-        POC: data[ticker].poc ?? "No Data",
-        POC_Move: data[ticker].pocMove ?? "No Data",
-        VAL: data[ticker].val ?? "No Data",
-        VAH: data[ticker].vah ?? "No Data",
-        Gaps_Above: data[ticker].gapsAbove?.join(", ") || "No Data",
-        Gaps_Below: data[ticker].gapsBelow?.join(", ") || "No Data"
-      }));
-
-      console.log("Processed Data for Display:", signalsArray);
+      if (!Array.isArray(data)) {
+        console.error("Expected an array but received:", typeof data, data);
+        return;
+      }
 
       const tickerContainer = document.getElementById("tickerContainer");
       tickerContainer.innerHTML = ""; // Clear previous content
 
-      signalsArray.forEach(info => {
+      data.forEach(info => {
         const box = document.createElement("div");
         box.classList.add("ticker-box");
 
         box.innerHTML = `
           <h3>${info.ticker}</h3>
-          <p><strong>POC:</strong> ${info.POC}</p>
-          <p><strong>POC Move:</strong> ${info.POC_Move}</p>
-          <p><strong>VAL:</strong> ${info.VAL}</p>
-          <p><strong>VAH:</strong> ${info.VAH}</p>
-          <p><strong>Gaps Above:</strong> ${info.Gaps_Above}</p>
-          <p><strong>Gaps Below:</strong> ${info.Gaps_Below}</p>
+          <p><strong>POC (1H):</strong> ${info.POC_1H ?? "No Data"}</p>
+          <p><strong>POC (Daily):</strong> ${info.POC_Daily ?? "No Data"}</p>
+          <p><strong>VAL (1H):</strong> ${info.VAL_1H ?? "No Data"}</p>
+          <p><strong>VAL (Daily):</strong> ${info.VAL_Daily ?? "No Data"}</p>
+          <p><strong>VAH (1H):</strong> ${info.VAH_1H ?? "No Data"}</p>
+          <p><strong>VAH (Daily):</strong> ${info.VAH_Daily ?? "No Data"}</p>
         `;
 
         tickerContainer.appendChild(box);
