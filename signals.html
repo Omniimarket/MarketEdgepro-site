@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Signals – MarketProEdge</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .chart-cell {
+      width: 150px;
+      height: 60px;
+    }
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -29,9 +40,9 @@
         <tr>
           <th>Ticker</th>
           <th>POC</th>
+          <th>Chart</th>
           <th>Gaps Above</th>
           <th>Gaps Below</th>
-          <th>Volume Clusters</th>
         </tr>
       </thead>
       <tbody id="signalTable"></tbody>
@@ -44,24 +55,64 @@
 
   <script>
     fetch("/marketproedge_signals.json")
-      .then(res => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
+      .then(res => res.json())
       .then(data => {
         const tbody = document.getElementById("signalTable");
-        Object.entries(data).forEach(([ticker, info]) => {
+
+        Object.entries(data).forEach(([ticker, info], index) => {
           const row = document.createElement("tr");
+          const canvasId = `chart-${index}`;
+
           row.innerHTML = `
             <td><strong>${ticker}</strong></td>
             <td>${info.poc}</td>
+            <td class="chart-cell"><canvas id="${canvasId}"></canvas></td>
             <td>${info.gapsAbove.join(", ") || "—"}</td>
             <td>${info.gapsBelow.join(", ") || "—"}</td>
-            <td>${info.volumeClusters.slice(0, 10).join(", ")}...</td>
           `;
+
           tbody.appendChild(row);
+
+          const volumes = info.volumeClusters || [];
+          const labels = volumes.map((_, i) => i + 1);
+
+          const ctx = document.getElementById(canvasId).getContext("2d");
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: 'Volume Clusters',
+                  data: volumes,
+                  borderColor: '#3b82f6',
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                  tension: 0.4,
+                  fill: true,
+                },
+                {
+                  label: 'POC',
+                  data: Array(volumes.length).fill(info.poc),
+                  borderColor: '#ef4444',
+                  borderWidth: 1.5,
+                  pointRadius: 0,
+                  borderDash: [5, 5],
+                  fill: false,
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false }
+              },
+              scales: {
+                x: { display: false },
+                y: { display: false }
+              }
+            }
+          });
         });
       })
       .catch(err => {
