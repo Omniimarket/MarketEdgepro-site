@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("Script.js is running on signals page.");
   
   // Adjust the fetch path if needed. This assumes marketproedge_signals.json is in the same folder.
-  fetch("marketproedge_signals.json")
+  fetch("/marketproedge_signals.json")
     .then(response => response.json())
     .then(data => {
       console.log("Fetched JSON Data:", data);
