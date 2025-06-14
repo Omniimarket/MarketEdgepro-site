@@ -2,55 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MarketProEdge Signals</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 20px;
-      background: #f7f7f7;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      vertical-align: top;
-    }
-    th {
-      background: #222;
-      color: white;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Signals – MarketProEdge</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>📊 MarketProEdge Volume Profile Signals</h1>
-  <a href="index.html">← Back to Home</a>
-  <table id="signalTable">
-    <thead>
-      <tr>
-        <th>Ticker</th>
-        <th>POC</th>
-        <th>Gaps Above</th>
-        <th>Gaps Below</th>
-        <th>Volume Clusters</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <header>
+    <div class="logo">MarketProEdge</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#features">Features</a>
+      <a href="signals.html" class="active">Signals</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#">Login</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>📊 Daily Volume Profile Signals</h1>
+    <p>Live gaps, POC levels, and volume clusters for top tickers – updated daily.</p>
+  </section>
+
+  <section class="signal-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th>POC</th>
+          <th>Gaps Above</th>
+          <th>Gaps Below</th>
+          <th>Volume Clusters</th>
+        </tr>
+      </thead>
+      <tbody id="signalTable"></tbody>
+    </table>
+  </section>
+
+  <footer>
+    &copy; 2025 MarketProEdge. All rights reserved.
+  </footer>
 
   <script>
     fetch("marketproedge_signals.json")
       .then(res => res.json())
       .then(data => {
-        const tbody = document.querySelector("#signalTable tbody");
+        const tbody = document.getElementById("signalTable");
 
-        for (const [ticker, info] of Object.entries(data)) {
+        Object.entries(data).forEach(([ticker, info]) => {
           const row = document.createElement("tr");
-
           row.innerHTML = \`
             <td><strong>\${ticker}</strong></td>
             <td>\${info.poc}</td>
@@ -58,13 +57,13 @@
             <td>\${info.gapsBelow.join(", ")}</td>
             <td>\${info.volumeClusters.slice(0, 10).join(", ")} ...</td>
           \`;
-
           tbody.appendChild(row);
-        }
+        });
       })
       .catch(err => {
-        console.error("Error loading JSON:", err);
-        document.body.innerHTML += "<p style='color:red;'>Failed to load signal data.</p>";
+        document.getElementById("signalTable").innerHTML =
+          '<tr><td colspan=\"5\" style=\"color:red;\">Failed to load signal data.</td></tr>';
+        console.error(err);
       });
   </script>
 </body>
