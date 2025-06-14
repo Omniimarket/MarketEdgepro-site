@@ -5,14 +5,14 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("Fetched JSON Data:", data);
 
       // Convert JSON object into an array
-      const signalsArray = Object.entries(data).map(([ticker, details]) => ({
+      const signalsArray = Object.keys(data).map(ticker => ({
         ticker,
-        POC: details.POC !== undefined ? details.POC : "No Data",
-        POC_Move: details.POC_Move !== undefined ? details.POC_Move : "No Data",
-        VAL: details.VAL !== undefined ? details.VAL : "No Data",
-        VAH: details.VAH !== undefined ? details.VAH : "No Data",
-        Gaps_Above: details.Gaps_Above?.join(", ") || "No Data",
-        Gaps_Below: details.Gaps_Below?.join(", ") || "No Data"
+        POC: data[ticker].poc ?? "No Data",
+        POC_Move: data[ticker].pocMove ?? "No Data",
+        VAL: data[ticker].val ?? "No Data",
+        VAH: data[ticker].vah ?? "No Data",
+        Gaps_Above: data[ticker].gapsAbove?.join(", ") || "No Data",
+        Gaps_Below: data[ticker].gapsBelow?.join(", ") || "No Data"
       }));
 
       console.log("Processed Data for Display:", signalsArray);
