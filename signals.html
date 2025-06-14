@@ -91,26 +91,24 @@
 
           const ctx = document.getElementById(canvasId).getContext("2d");
           new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
               labels,
               datasets: [
                 {
                   label: 'Volume Clusters',
                   data: volumes,
-                  borderColor: '#3b82f6',
-                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                  tension: 0.4,
-                  fill: true,
+                  backgroundColor: '#3b82f6'
                 },
                 {
                   label: 'POC',
+                  type: 'line',
                   data: Array(volumes.length).fill(info.poc),
                   borderColor: '#ef4444',
-                  borderWidth: 1.5,
+                  borderWidth: 2,
                   pointRadius: 0,
-                  borderDash: [5, 5],
                   fill: false,
+                  borderDash: [5, 5]
                 }
               ]
             },
