@@ -1,26 +1,42 @@
-[
-  {
-    "ticker": "AAPL",
-    "POC": 198.58,
-    "POC_Move": -2.92,
-    "VAL": 195.64,
-    "VAH": 212.56,
-    "Volume_Clusters": [197.08, 197.58, 198.08],
-    "Gaps_Above": [203.58, 208.58],
-    "Gaps_Below": [193.58, 188.58],
-    "Near_VAL": null,
-    "Near_VAH": null
+
+  "AAPL": {
+    "POC_1h": 196.155,
+    "VAH_1h": 204.5,
+    "VAL_1h": 195.77,
+    "POC_1day": 205.35001,
+    "VAH_1day": 213.94,
+    "VAL_1day": 193.25
   },
-  {
-    "ticker": "MSFT",
-    "POC": 449.45,
-    "POC_Move": -23.3,
-    "VAL": 434.26,
-    "VAH": 477.92,
-    "Volume_Clusters": [447.95, 448.45, 448.95],
-    "Gaps_Above": [454.45, 459.45],
-    "Gaps_Below": [444.45, 439.45],
-    "Near_VAL": null,
-    "Near_VAH": null
-  }
-]
+  "MSFT": {
+    "POC_1h": 475.22,
+    "VAH_1h": 480.39999,
+    "VAL_1h": 466.95999,
+    "POC_1day": 460.35999,
+    "VAH_1day": 480.42001,
+    "VAL_1day": 429.98999
+  },
+  "TSLA": {
+    "POC_1h": 333.12,
+    "VAH_1h": 335.5,
+    "VAL_1h": 298.84259,
+    "POC_1day": 284.70001,
+    "VAH_1day": 367.70999,
+    "VAL_1day": 271.0
+  },
+  "NVDA": {
+    "POC_1h": 141.2,
+    "VAH_1h": 145.0,
+    "VAL_1h": 140.855,
+    "POC_1day": 139.19,
+    "VAH_1day": 145.0,
+    "VAL_1day": 110.82
+  },
+  "AMZN": {
+    "POC_1h": 333.12,
+    "VAH_1h": 335.5,
+    "VAL_1h": 298.84259,
+    "POC_1day": 284.70001,
+    "VAH_1day": 367.70999,
+    "VAL_1day": 271.0
+  },
+}
