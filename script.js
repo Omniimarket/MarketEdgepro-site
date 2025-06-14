@@ -4,15 +4,15 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       console.log("Fetched JSON Data:", data);
 
-      // Convert object to array
+      // Convert JSON object into an array
       const signalsArray = Object.entries(data).map(([ticker, details]) => ({
         ticker,
-        POC: details.POC ?? "—",
-        POC_Move: details.POC_Move ?? "—",
-        VAL: details.VAL ?? "—",
-        VAH: details.VAH ?? "—",
-        Gaps_Above: details.Gaps_Above?.join(", ") || "—",
-        Gaps_Below: details.Gaps_Below?.join(", ") || "—"
+        POC: details.POC !== undefined ? details.POC : "No Data",
+        POC_Move: details.POC_Move !== undefined ? details.POC_Move : "No Data",
+        VAL: details.VAL !== undefined ? details.VAL : "No Data",
+        VAH: details.VAH !== undefined ? details.VAH : "No Data",
+        Gaps_Above: details.Gaps_Above?.join(", ") || "No Data",
+        Gaps_Below: details.Gaps_Below?.join(", ") || "No Data"
       }));
 
       console.log("Processed Data for Display:", signalsArray);
@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
           <p><strong>VAH:</strong> ${info.VAH}</p>
           <p><strong>Gaps Above:</strong> ${info.Gaps_Above}</p>
           <p><strong>Gaps Below:</strong> ${info.Gaps_Below}</p>
-          <button onclick="showChart('${info.ticker}', ${info.POC}, ${info.VAL}, ${info.VAH})">📈 View Chart</button>
         `;
 
         tickerContainer.appendChild(box);
