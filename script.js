@@ -1,19 +1,25 @@
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Script.js is running on signals page.");
-  
-  // Adjust the fetch path if needed. This assumes marketproedge_signals.json is in the same folder.
-  fetch("/marketproedge_signals.json")
-    .then(response => response.json())
+
+  // Adjust the fetch path to match the location of your JSON file.
+  fetch("/Marketproedge.signals.json")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not okay: " + response.statusText);
+      }
+      return response.json();
+    })
     .then(data => {
       console.log("Fetched JSON Data:", data);
       
       const tickerContainer = document.getElementById("tickerContainer");
       tickerContainer.innerHTML = ""; // Clear previous content
       
-      // Data is an object with tickers as keys
+      // Iterate through each ticker in the JSON object
       Object.keys(data).forEach(ticker => {
         const info = data[ticker];
-                
+        console.log("Ticker:", ticker, info); // Debug: Log ticker and its data
+        
         const box = document.createElement("div");
         box.classList.add("ticker-box");
         
