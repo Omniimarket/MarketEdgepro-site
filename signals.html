@@ -7,6 +7,46 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #111;
+      padding: 10px 20px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header .logo {
+      font-size: 1.2rem;
+    }
+    nav a {
+      color: #fff;
+      margin-left: 15px;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px auto;
+      max-width: 1000px;
+      background: #fff;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
     .tooltip {
       position: relative;
       cursor: pointer;
@@ -60,26 +100,21 @@
       text-decoration: none;
       cursor: pointer;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: center;
-    }
-    th {
-      background-color: #f4f4f4;
-    }
   </style>
 </head>
 <body>
+
   <header>
-    <div class="logo">📊 MarketProEdge Daily Signals</div>
+    <div class="logo">📊 MarketProEdge</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="signals.html">Signals</a>
+      <a href="#">Login</a>
+    </nav>
   </header>
+
   <main>
+    <h2 style="text-align: center; margin-top: 20px;">Daily Signals</h2>
     <table id="signalsTable">
       <thead>
         <tr>
@@ -104,6 +139,7 @@
       <canvas id="chartCanvas" width="600" height="400"></canvas>
     </div>
   </div>
+
 <script>
 fetch("marketproedge_signals.json")
   .then(response => response.json())
@@ -140,7 +176,6 @@ function showChart(ticker) {
   alert(`Chart for ${ticker} coming soon!`);
 }
 </script>
-
 
 </body>
 </html>
