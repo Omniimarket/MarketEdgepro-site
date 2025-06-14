@@ -1,40 +1,48 @@
+<!-- signals.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MarketProEdge - Daily Signals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📊 MarketProEdge Daily Signals</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 10;
-      left: 0;
-      top: 0;
+    table {
       width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.5);
+      border-collapse: collapse;
+      margin-top: 20px;
     }
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      width: 80%;
-      max-width: 600px;
-      border-radius: 10px;
+    th, td {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .tooltip {
       position: relative;
-    }
-    .close {
-      color: #aaa;
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      font-size: 28px;
-      font-weight: bold;
       cursor: pointer;
+    }
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      padding: 8px;
+      border-radius: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -100px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
     }
   </style>
 </head>
@@ -43,25 +51,22 @@
     <div class="logo">MarketProEdge</div>
     <nav>
       <a href="index.html">Home</a>
-      <a href="#features">Features</a>
+      <a href="#">Features</a>
       <a href="signals.html">Signals</a>
-      <a href="#pricing">Pricing</a>
+      <a href="#">Pricing</a>
       <a href="#">Login</a>
     </nav>
   </header>
 
-  <section class="hero">
+  <main>
     <h1>📊 MarketProEdge Daily Signals</h1>
-    <p>Volume Profile data updated daily: POC, VAL/VAH, Gaps, and more.</p>
-  </section>
-
-  <section class="signals">
-    <table>
+    <table id="signals-table">
       <thead>
         <tr>
           <th>Ticker</th>
           <th>POC</th>
           <th>POC Move</th>
+          <th>Signal</th>
           <th>VAL</th>
           <th>VAH</th>
           <th>Volume Clusters</th>
@@ -70,88 +75,37 @@
           <th>Chart</th>
         </tr>
       </thead>
-      <tbody id="signalTable"></tbody>
+      <tbody></tbody>
     </table>
-  </section>
-
-  <div id="chartModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
-      <canvas id="tickerChart" width="400" height="300"></canvas>
-    </div>
-  </div>
-
-  <footer>
-    &copy; 2025 MarketProEdge. All rights reserved.
-  </footer>
+  </main>
 
   <script>
-    let signals = {};
-
-    fetch('marketproedge_signals.json')
-      .then(response => response.json())
+    fetch("marketproedge_signals.json")
+      .then(res => res.json())
       .then(data => {
-        signals = data;
-        const table = document.getElementById("signalTable");
-
-        Object.keys(data).forEach(ticker => {
+        const tbody = document.querySelector("#signals-table tbody");
+        Object.entries(data).forEach(([ticker, d]) => {
           const row = document.createElement("tr");
-          const d = data[ticker];
-          const pocMove = d.poc_movement || "–";
-          const pocSymbol = pocMove === "up" ? "📈" : pocMove === "down" ? "📉" : "➖";
 
-          const volumeClusters = d.volume_clusters || [];
-          const clusterText = volumeClusters.length ? "🧠 Hover" : "—";
-
-          const nearVal = d.near_val ? "✅" : "";
-          const nearVah = d.near_vah ? "✅" : "";
+          const clusters = d.volumeClusters && d.volumeClusters.length
+            ? `<div class='tooltip'>🧠 Hover<span class='tooltiptext'>${d.volumeClusters.join(", ")}</span></div>`
+            : "—";
 
           row.innerHTML = `
             <td>${ticker}</td>
             <td>${d.poc ?? "—"}</td>
-            <td title="${pocMove}">${pocSymbol}</td>
+            <td>${d.poc_movement ?? "—"}</td>
+            <td>${d.signal_movement ?? "—"}</td>
             <td>${d.val ?? "—"}</td>
             <td>${d.vah ?? "—"}</td>
-            <td title="${volumeClusters.join(', ')}">${clusterText}</td>
-            <td>${nearVal}</td>
-            <td>${nearVah}</td>
-            <td><button onclick="openChart('${ticker}')">📈 Chart</button></td>
+            <td>${clusters}</td>
+            <td>${d.near_val ? "✅" : ""}</td>
+            <td>${d.near_vah ? "✅" : ""}</td>
+            <td><a href="#">📈 Chart</a></td>
           `;
-          table.appendChild(row);
+          tbody.appendChild(row);
         });
       });
-
-    function openChart(ticker) {
-      const d = signals[ticker];
-      if (!d || !d.volume_clusters || d.volume_clusters.length === 0) return;
-
-      const ctx = document.getElementById("tickerChart").getContext("2d");
-      if (window.currentChart) window.currentChart.destroy();
-
-      window.currentChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: d.volume_clusters.map(String),
-          datasets: [{
-            label: `Volume Clusters - ${ticker}`,
-            data: d.volume_clusters.map(() => Math.floor(Math.random() * 100)), // Placeholder heights
-            backgroundColor: "rgba(0,123,255,0.6)"
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false }
-          }
-        }
-      });
-
-      document.getElementById("chartModal").style.display = "block";
-    }
-
-    document.getElementById("closeModal").onclick = function () {
-      document.getElementById("chartModal").style.display = "none";
-    };
   </script>
 </body>
 </html>
