@@ -8,12 +8,23 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     .chart-cell {
-      width: 150px;
-      height: 60px;
+      width: 180px;
+      height: 80px;
+      padding: 0.5rem;
     }
     canvas {
       width: 100% !important;
       height: 100% !important;
+      display: block;
+    }
+    .signal-table td {
+      vertical-align: top;
+    }
+    .long-text {
+      max-width: 250px;
+      word-wrap: break-word;
+      font-size: 0.85rem;
+      line-height: 1.4;
     }
   </style>
 </head>
@@ -43,6 +54,7 @@
           <th>Chart</th>
           <th>Gaps Above</th>
           <th>Gaps Below</th>
+          <th>Volume Clusters</th>
         </tr>
       </thead>
       <tbody id="signalTable"></tbody>
@@ -67,8 +79,9 @@
             <td><strong>${ticker}</strong></td>
             <td>${info.poc}</td>
             <td class="chart-cell"><canvas id="${canvasId}"></canvas></td>
-            <td>${info.gapsAbove.join(", ") || "—"}</td>
-            <td>${info.gapsBelow.join(", ") || "—"}</td>
+            <td class="long-text">${info.gapsAbove.join(", ") || "—"}</td>
+            <td class="long-text">${info.gapsBelow.join(", ") || "—"}</td>
+            <td class="long-text">${info.volumeClusters.join(", ") || "—"}</td>
           `;
 
           tbody.appendChild(row);
@@ -118,7 +131,7 @@
       .catch(err => {
         console.error("Failed to load JSON:", err);
         document.getElementById("signalTable").innerHTML =
-          '<tr><td colspan="5" style="color:red;">⚠️ Failed to load signal data.</td></tr>';
+          '<tr><td colspan="6" style="color:red;">⚠️ Failed to load signal data.</td></tr>';
       });
   </script>
 </body>
