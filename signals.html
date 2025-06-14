@@ -146,22 +146,22 @@ fetch("marketproedge_signals.json")
   .then(data => {
     const tableBody = document.getElementById("tableBody");
 
-    Object.entries(data).forEach(([ticker, info]) => {
+    data.forEach(info => {
       const row = document.createElement("tr");
 
       row.innerHTML = `
-        <td>${ticker}</td>
-        <td>${info.poc ?? "—"}</td>
-        <td>${info.pocMove ?? "—"}</td>
-        <td>${info.val ?? "—"}</td>
-        <td>${info.vah ?? "—"}</td>
+        <td>${info.ticker}</td>
+        <td>${info.POC ?? "—"}</td>
+        <td>${info.POC_Move ?? "—"}</td>
+        <td>${info.VAL ?? "—"}</td>
+        <td>${info.VAH ?? "—"}</td>
         <td>
-          <button title="${(info.volumeClusters || []).join(", ")}">🧠 Hover</button>
+          <button title="${(info.Volume_Clusters || []).join(", ")}">🧠 Hover</button>
         </td>
-        <td>${info.nearVAL ? "✅" : ""}</td>
-        <td>${info.nearVAH ? "✅" : ""}</td>
+        <td>${info.Near_VAL ? "✅" : ""}</td>
+        <td>${info.Near_VAH ? "✅" : ""}</td>
         <td>
-          <button onclick="showChart('${ticker}')">📈 Chart</button>
+          <button onclick="showChart('${info.ticker}')">📈 Chart</button>
         </td>
       `;
 
@@ -176,6 +176,7 @@ function showChart(ticker) {
   alert(`Chart for ${ticker} coming soon!`);
 }
 </script>
+
 
 
 </body>
