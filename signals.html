@@ -8,8 +8,8 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     .chart-cell {
-      width: 180px;
-      height: 80px;
+      width: 200px;
+      height: 100px;
       padding: 0.5rem;
     }
     canvas {
@@ -90,6 +90,7 @@
           const labels = volumes.map((_, i) => i + 1);
 
           const ctx = document.getElementById(canvasId).getContext("2d");
+
           new Chart(ctx, {
             type: 'bar',
             data: {
@@ -98,17 +99,19 @@
                 {
                   label: 'Volume Clusters',
                   data: volumes,
-                  backgroundColor: '#3b82f6'
+                  backgroundColor: '#3b82f6',
+                  barThickness: 8,
+                  borderRadius: 4,
                 },
                 {
-                  label: 'POC',
+                  label: 'POC Line',
                   type: 'line',
                   data: Array(volumes.length).fill(info.poc),
                   borderColor: '#ef4444',
                   borderWidth: 2,
                   pointRadius: 0,
+                  borderDash: [6, 4],
                   fill: false,
-                  borderDash: [5, 5]
                 }
               ]
             },
@@ -116,7 +119,8 @@
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
-                legend: { display: false }
+                legend: { display: false },
+                tooltip: { enabled: true }
               },
               scales: {
                 x: { display: false },
