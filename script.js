@@ -43,9 +43,10 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="view-chart">View Chart</button>
         `;
 
-        // Add an event listener to the button inside this ticker box
+        // Add an event listener to the button to open the modal with the chart for that ticker
         box.querySelector("button.view-chart").addEventListener("click", function () {
           drawChart(ticker, info);
+          openModal();
         });
 
         // Append the box to the container
@@ -56,12 +57,24 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("❌ Error loading signals:", error);
     });
 
+  // Function to open the modal
+  function openModal() {
+    const modal = document.getElementById("chartModal");
+    modal.style.display = "block";
+  }
+
+  // Function to close the modal when the close button is clicked
+  document.querySelector(".modal-content .close").addEventListener("click", function () {
+    const modal = document.getElementById("chartModal");
+    modal.style.display = "none";
+  });
+
   // Function to draw (or update) a Chart.js bar chart for a given ticker.
   function drawChart(ticker, info) {
-    // Get the canvas context
+    // Get the canvas context for the chart in the modal
     const ctx = document.getElementById('myChart').getContext('2d');
 
-    // Prepare the chart data: two datasets for 1H and Daily values
+    // Prepare the chart data with two datasets for 1H and Daily values.
     const chartData = {
       labels: ["Point of Control", "Upper Trading Level", "Lower Trading Level"],
       datasets: [
@@ -78,12 +91,12 @@ document.addEventListener("DOMContentLoaded", function () {
       ]
     };
 
-    // If there is an existing chart instance, destroy it first.
+    // If there's an existing chart instance, destroy it first.
     if (window.myChartInstance) {
       window.myChartInstance.destroy();
     }
 
-    // Create a new bar chart
+    // Create a new bar chart using Chart.js.
     window.myChartInstance = new Chart(ctx, {
       type: 'bar',
       data: chartData,
