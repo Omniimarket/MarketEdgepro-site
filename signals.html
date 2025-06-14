@@ -74,34 +74,78 @@
     </div>
   </main>
 
-  <script>
-    fetch('marketproedge_signals.json')
-      .then(res => res.json())
-      .then(data => {
-        const tbody = document.getElementById('signals-body');
-        Object.keys(data).forEach(ticker => {
-          const row = document.createElement('tr');
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+fetch('marketproedge_signals.json')
+  .then(res => res.json())
+  .then(data => {
+    const tbody = document.getElementById('signals-body');
 
-          const signal = data[ticker];
-          const isNearVal = signal.near_val ? '✅' : '';
-          const isNearVah = signal.near_vah ? '✅' : '';
+    Object.keys(data).forEach(ticker => {
+      const s = data[ticker];
+      const isNearVal = s.near_val ? '✅' : '';
+      const isNearVah = s.near_vah ? '✅' : '';
+      const volTip = s.volume_clusters && s.volume_clusters.length
+        ? s.volume_clusters.join(', ')
+        : 'No clusters';
 
-          row.innerHTML = `
-            <td>${ticker}</td>
-            <td>${signal.poc}</td>
-            <td>${signal.val}</td>
-            <td>${signal.vah}</td>
-            <td class="${signal.near_val ? 'highlight-val' : ''}">${isNearVal}</td>
-            <td class="${signal.near_vah ? 'highlight-vah' : ''}">${isNearVah}</td>
-          `;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${ticker}</td>
+        <td>${s.poc}</td>
+        <td>${s.val}</td>
+        <td>${s.vah}</td>
+        <td class="${s.near_val ? 'highlight-val' : ''}">${isNearVal}</td>
+        <td class="${s.near_vah ? 'highlight-vah' : ''}">${isNearVah}</td>
+        <td><span title="${volTip}">🧠 Hover</span></td>
+        <td><button onclick="openChart('${ticker}', ${s.poc}, ${JSON.stringify(s.volume_clusters)})">📈 Chart</button></td>
+      `;
+      tbody.appendChild(row);
+    });
+  });
 
-          tbody.appendChild(row);
-        });
-      })
-      .catch(err => {
-        document.getElementById('signals-body').innerHTML = '<tr><td colspan="6">⚠️ Failed to load signals.</td></tr>';
-        console.error('Error loading signals:', err);
-      });
-  </script>
+function openChart(ticker, poc, clusters) {
+  const ctx = document.getElementById('chartCanvas').getContext('2d');
+  if (window.pocChart) window.pocChart.destroy();
+
+  window.pocChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: clusters,
+      datasets: [{
+        label: `Volume Clusters for ${ticker}`,
+        data: clusters.map(() => Math.random() * 100), // Fake volume
+        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+      }]
+    },
+    options: {
+      scales: {
+        x: { title: { display: true, text: 'Price Level' } },
+        y: { title: { display: true, text: 'Relative Volume' } }
+      },
+      plugins: {
+        annotation: {
+          annotations: {
+            line1: {
+              type: 'line',
+              xMin: poc,
+              xMax: poc,
+              borderColor: 'red',
+              borderWidth: 2,
+              label: {
+                content: 'POC',
+                enabled: true,
+                position: 'end'
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  document.getElementById('chartModal').style.display = 'block';
+}
+</script>
 </body>
 </html>
