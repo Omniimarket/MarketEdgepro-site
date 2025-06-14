@@ -1,69 +1,37 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MarketProEdge - Volume Profile Signals</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <div class="logo">MarketProEdge</div>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Features</a>
-      <a href="signals.html">Signals</a>
-      <a href="#">Pricing</a>
-      <a href="#">Login</a>
-    </nav>
-  </header>
 
-  <section class="hero">
-    <h1>Daily Volume Profile Signals for Every Ticker</h1>
-    <p>MarketProEdge gives you key insights like gaps, POC shifts, and high-volume nodes – updated daily so you're never behind the tape.</p>
-    <button class="btn-primary">Start Free Trial</button>
-  </section>
+<header>
+  <div class="logo">📊 MarketProEdge</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Signals</a>
+    <a href="#">Login</a>
+  </nav>
+</header>
 
-  <section class="features">
-    <div class="feature">
-      <h3>Gap Detection</h3>
-      <p>See unfilled gaps above or below price for every stock.</p>
-    </div>
-    <div class="feature">
-      <h3>POC Movement</h3>
-      <p>Track shifts in the Point of Control to spot momentum early.</p>
-    </div>
-    <div class="feature">
-      <h3>Volume Clusters</h3>
-      <p>Get alerts on high-volume areas that may act as support or resistance.</p>
-    </div>
-  </section>
+<main>
+  <h2 style="text-align: center;">Daily Volume Profile Signals</h2>
+  <div id="tickerContainer" class="ticker-grid"></div>
+</main>
 
-  <section class="pricing">
-    <h2>Choose Your Plan</h2>
-    <div class="price-card">
-      <h3>$19 / Month</h3>
-      <ul>
-        <li>Daily Signals</li>
-        <li>1 Watchlist</li>
-        <li>Email Support</li>
-      </ul>
-      <button>Subscribe</button>
-    </div>
-    <div class="price-card">
-      <h3>$30 / Month</h3>
-      <ul>
-        <li>Daily Signals</li>
-        <li>Unlimited Watchlists</li>
-        <li>Email + SMS Alerts</li>
-      </ul>
-      <button>Subscribe</button>
-    </div>
-  </section>
+<!-- Modal for Chart -->
+<div id="chartModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <canvas id="chartCanvas"></canvas>
+  </div>
+</div>
 
-  <footer>
-    &copy; 2025 MarketProEdge. All rights reserved.
-  </footer>
+<script src="script.js"></script>
+
 </body>
 </html>
