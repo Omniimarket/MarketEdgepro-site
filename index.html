@@ -2,66 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MarketProEdge - Volume Profile Signals</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MarketProEdge Signals</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      vertical-align: top;
+    }
+    th {
+      background: #222;
+      color: white;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="logo">MarketProEdge</div>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Features</a>
-      <a href="#">Pricing</a>
-      <a href="#">Login</a>
-    </nav>
-  </header>
+  <h1>MarketProEdge Volume Profile Signals</h1>
+  <table id="signalTable">
+    <thead>
+      <tr>
+        <th>Ticker</th>
+        <th>POC</th>
+        <th>Gaps Above</th>
+        <th>Gaps Below</th>
+        <th>Volume Clusters</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-  <section class="hero">
-    <h1>Daily Volume Profile Signals for Every Ticker</h1>
-    <p>MarketProEdge gives you key insights like gaps, POC shifts, and high-volume nodes – updated daily so you're never behind the tape.</p>
-    <button class="btn-primary">Start Free Trial</button>
-  </section>
+  <script>
+    fetch("marketproedge_signals.json")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector("#signalTable tbody");
 
-  <section class="features">
-    <div class="feature">
-      <h3>Gap Detection</h3>
-      <p>See unfilled gaps above or below price for every stock.</p>
-    </div>
-    <div class="feature">
-      <h3>POC Movement</h3>
-      <p>Track shifts in the Point of Control to spot momentum early.</p>
-    </div>
-    <div class="feature">
-      <h3>Volume Clusters</h3>
-      <p>Get alerts on high-volume areas that may act as support or resistance.</p>
-    </div>
-  </section>
+        for (const [ticker, info] of Object.entries(data)) {
+          const row = document.createElement("tr");
 
-  <section class="pricing">
-    <h2>Choose Your Plan</h2>
-    <div class="price-card">
-      <h3>$19 / Month</h3>
-      <ul>
-        <li>Daily Signals</li>
-        <li>1 Watchlist</li>
-        <li>Email Support</li>
-      </ul>
-      <button>Subscribe</button>
-    </div>
-    <div class="price-card">
-      <h3>$30 / Month</h3>
-      <ul>
-        <li>Daily Signals</li>
-        <li>Unlimited Watchlists</li>
-        <li>Email + SMS Alerts</li>
-      </ul>
-      <button>Subscribe</button>
-    </div>
-  </section>
+          row.innerHTML = \`
+            <td><strong>\${ticker}</strong></td>
+            <td>\${info.poc}</td>
+            <td>\${info.gapsAbove.join(", ")}</td>
+            <td>\${info.gapsBelow.join(", ")}</td>
+            <td>\${info.volumeClusters.slice(0, 10).join(", ")} ...</td>
+          \`;
 
-  <footer>
-    &copy; 2025 MarketProEdge. All rights reserved.
-  </footer>
+          tbody.appendChild(row);
+        }
+      })
+      .catch(err => {
+        console.error("Error loading JSON:", err);
+        document.body.innerHTML += "<p style='color:red;'>Failed to load signal data.</p>";
+      });
+  </script>
 </body>
 </html>
+
