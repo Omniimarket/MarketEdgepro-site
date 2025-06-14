@@ -115,15 +115,15 @@ fetch("marketproedge_signals.json")
 
       row.innerHTML = `
         <td>${ticker}</td>
-        <td>${info.POC ?? "—"}</td>
-        <td>${info.POC_Move ?? "—"}</td>
-        <td>${info.VAL ?? "—"}</td>
-        <td>${info.VAH ?? "—"}</td>
+        <td>${info.poc ?? "—"}</td>
+        <td>${info.poc_move ?? "—"}</td>
+        <td>${info.val ?? "—"}</td>
+        <td>${info.vah ?? "—"}</td>
         <td>
-          <button title="${(info.Volume_Clusters || []).join(", ")}">🧠 Hover</button>
+          <button title="${(info.volumeClusters || []).join(", ")}">🧠 Hover</button>
         </td>
-        <td>${info.Near_VAL ? "✅" : ""}</td>
-        <td>${info.Near_VAH ? "✅" : ""}</td>
+        <td>${info.near_VAL ? "✅" : ""}</td>
+        <td>${info.near_VAH ? "✅" : ""}</td>
         <td>
           <button onclick="showChart('${ticker}')">📈 Chart</button>
         </td>
@@ -136,11 +136,11 @@ fetch("marketproedge_signals.json")
     console.error("Error loading signals:", error);
   });
 
-// Placeholder chart function
 function showChart(ticker) {
   alert(`Chart for ${ticker} coming soon!`);
 }
 </script>
+
 
 </body>
 </html>
