@@ -104,37 +104,6 @@
       <canvas id="chartCanvas" width="600" height="400"></canvas>
     </div>
   </div>
-
-  <script>
-fetch("marketproedge_signals.json")
-  .then(res => res.json())
-  .then(data => {
-    const tbody = document.getElementById("tableBody");
-   Object.entries(data).forEach(([ticker, row]) => {
-  const tr = document.createElement("tr");
-
-  tr.innerHTML = `
-    <td>${ticker}</td>
-    <td>${row.POC ?? "—"}</td>
-    <td>${row.POC_Move ?? "—"}</td>
-    <td>${row.VAL ?? "—"}</td>
-    <td>${row.VAH ?? "—"}</td>
-    <td>
-      <span class="tooltip">🧠 Hover
-        <span class="tooltiptext">${(row.Volume_Clusters || []).join(", ")}</span>
-      </span>
-    </td>
-    <td>${row.Near_VAL ?? ""}</td>
-    <td>${row.Near_VAH ?? ""}</td>
-    <td><button onclick="showChart('${ticker}')">📈 Chart</button></td>
-  `;
-
-  document.getElementById("tableBody").appendChild(tr);
-});
-
-  })
-  .catch(err => console.error("Error loading signals:", err));
-</script>
 <script>
 fetch("marketproedge_signals.json")
   .then(response => response.json())
