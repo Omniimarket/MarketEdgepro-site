@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MarketProEdge Signals</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      vertical-align: top;
+    }
+    th {
+      background: #222;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 MarketProEdge Volume Profile Signals</h1>
+  <a href="index.html">← Back to Home</a>
+  <table id="signalTable">
+    <thead>
+      <tr>
+        <th>Ticker</th>
+        <th>POC</th>
+        <th>Gaps Above</th>
+        <th>Gaps Below</th>
+        <th>Volume Clusters</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    fetch("marketproedge_signals.json")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector("#signalTable tbody");
+
+        for (const [ticker, info] of Object.entries(data)) {
+          const row = document.createElement("tr");
+
+          row.innerHTML = \`
+            <td><strong>\${ticker}</strong></td>
+            <td>\${info.poc}</td>
+            <td>\${info.gapsAbove.join(", ")}</td>
+            <td>\${info.gapsBelow.join(", ")}</td>
+            <td>\${info.volumeClusters.slice(0, 10).join(", ")} ...</td>
+          \`;
+
+          tbody.appendChild(row);
+        }
+      })
+      .catch(err => {
+        console.error("Error loading JSON:", err);
+        document.body.innerHTML += "<p style='color:red;'>Failed to load signal data.</p>";
+      });
+  </script>
+</body>
+</html>
