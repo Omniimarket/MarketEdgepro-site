@@ -11,10 +11,9 @@
       width: 200px;
       height: 100px;
       padding: 0.5rem;
+      cursor: pointer;
     }
     canvas {
-      width: 100% !important;
-      height: 100% !important;
       display: block;
     }
     .signal-table td {
@@ -25,6 +24,38 @@
       word-wrap: break-word;
       font-size: 0.85rem;
       line-height: 1.4;
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      width: 80%;
+      max-width: 600px;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    #modalChart {
+      width: 100% !important;
+      height: 300px !important;
     }
   </style>
 </head>
@@ -61,11 +92,69 @@
     </table>
   </section>
 
+  <div id="chartModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <canvas id="modalChart"></canvas>
+    </div>
+  </div>
+
   <footer>
     &copy; 2025 MarketProEdge. All rights reserved.
   </footer>
 
   <script>
+    let modalChartInstance = null;
+
+    function openModal(volumes, poc) {
+      document.getElementById("chartModal").style.display = "flex";
+      const ctx = document.getElementById("modalChart").getContext("2d");
+      const labels = volumes.map((_, i) => i + 1);
+
+      if (modalChartInstance) modalChartInstance.destroy();
+
+      modalChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Volume Clusters',
+              data: volumes,
+              backgroundColor: '#3b82f6',
+              barPercentage: 0.6,
+              categoryPercentage: 1.0,
+              borderRadius: 4
+            },
+            {
+              label: 'POC',
+              type: 'line',
+              data: Array(volumes.length).fill(poc),
+              borderColor: '#ef4444',
+              borderWidth: 2,
+              pointRadius: 0,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: true },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            x: { display: false },
+            y: { display: true }
+          }
+        }
+      });
+    }
+
+    function closeModal() {
+      document.getElementById("chartModal").style.display = "none";
+    }
+
     fetch("/marketproedge_signals.json")
       .then(res => res.json())
       .then(data => {
@@ -78,7 +167,9 @@
           row.innerHTML = `
             <td><strong>${ticker}</strong></td>
             <td>${info.poc}</td>
-            <td class="chart-cell"><canvas id="${canvasId}"></canvas></td>
+            <td class="chart-cell" onclick='openModal(${JSON.stringify(info.volumeClusters)}, ${info.poc})'>
+              <canvas id="${canvasId}"></canvas>
+            </td>
             <td class="long-text">${info.gapsAbove.join(", ") || "—"}</td>
             <td class="long-text">${info.gapsBelow.join(", ") || "—"}</td>
             <td class="long-text">${info.volumeClusters.join(", ") || "—"}</td>
@@ -88,7 +179,6 @@
 
           const volumes = info.volumeClusters || [];
           const labels = volumes.map((_, i) => i + 1);
-
           const ctx = document.getElementById(canvasId).getContext("2d");
 
           new Chart(ctx, {
@@ -99,19 +189,10 @@
                 {
                   label: 'Volume Clusters',
                   data: volumes,
-                  backgroundColor: '#3b82f6',
-                  barThickness: 8,
+                  backgroundColor: '#60a5fa',
                   borderRadius: 4,
-                },
-                {
-                  label: 'POC Line',
-                  type: 'line',
-                  data: Array(volumes.length).fill(info.poc),
-                  borderColor: '#ef4444',
-                  borderWidth: 2,
-                  pointRadius: 0,
-                  borderDash: [6, 4],
-                  fill: false,
+                  barPercentage: 0.6,
+                  categoryPercentage: 1.0,
                 }
               ]
             },
@@ -120,7 +201,7 @@
               maintainAspectRatio: false,
               plugins: {
                 legend: { display: false },
-                tooltip: { enabled: true }
+                tooltip: { enabled: false }
               },
               scales: {
                 x: { display: false },
