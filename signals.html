@@ -156,20 +156,20 @@
       console.log("Fetched Data:", data);
       let signalsArray = [];
 
-      // Check if data is an array or an object
-      if (Array.isArray(data)) {
-        signalsArray = data;
-      } else if (typeof data === 'object' && data !== null) {
-        // Convert the object into an array where each element includes the ticker.
+      // Data is an object with ticker keys. Convert it into an array.
+      if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
         signalsArray = Object.entries(data).map(([ticker, details]) => {
           return {
             ticker,
-            // We're mapping keys from your JSON to our expected output.
-            POC: details.poc !== undefined ? details.poc : "—",
-            Gaps_Above: details.gapsAbove || [],
-            Gaps_Below: details.gapsBelow || [],
-            Volume_Clusters: details.volumeClusters || [],
-            // You can add other fields if needed. Adjust the field names if required.
+            POC: details.POC !== undefined ? details.POC : "—",         // POC
+            POC_Move: details.POC_Move !== undefined ? details.POC_Move : "—", // POC Move
+            VAL: details.VAL !== undefined ? details.VAL : "—",             // VAL
+            VAH: details.VAH !== undefined ? details.VAH : "—",             // VAH
+            Volume_Clusters: details.Volume_Clusters || [],
+            Gaps_Above: details.Gaps_Above || [],
+            Gaps_Below: details.Gaps_Below || [],
+            Near_VAL: details.Near_VAL,   // either null or a value; you can display a check if needed
+            Near_VAH: details.Near_VAH    // either null or a value
           };
         });
       } else {
@@ -184,10 +184,10 @@
 
         row.innerHTML = `
           <td>${info.ticker}</td>
-          <td>${info.POC !== null ? info.POC : "—"}</td>
-          <td>${typeof info.POC_Move !== "undefined" ? info.POC_Move : "—"}</td>
-          <td>${typeof info.VAL !== "undefined" ? info.VAL : "—"}</td>
-          <td>${typeof info.VAH !== "undefined" ? info.VAH : "—"}</td>
+          <td>${info.POC}</td>
+          <td>${info.POC_Move}</td>
+          <td>${info.VAL}</td>
+          <td>${info.VAH}</td>
           <td>
             <button class="tooltip">🧠 Hover
               <span class="tooltiptext">${(info.Volume_Clusters || []).join(", ")}</span>
@@ -195,8 +195,8 @@
           </td>
           <td>${(info.Gaps_Above || []).join(", ") || "—"}</td>
           <td>${(info.Gaps_Below || []).join(", ") || "—"}</td>
-          <td>${info.Near_VAL !== undefined && info.Near_VAL !== null ? "✅" : ""}</td>
-          <td>${info.Near_VAH !== undefined && info.Near_VAH !== null ? "✅" : ""}</td>
+          <td>${info.Near_VAL !== null ? "✅" : "—"}</td>
+          <td>${info.Near_VAH !== null ? "✅" : "—"}</td>
           <td>
             <button onclick="showChart('${info.ticker}')">📈 Chart</button>
           </td>
@@ -213,6 +213,7 @@
     alert(`Chart for ${ticker} coming soon!`);
   }
 </script>
+
 
 
 
