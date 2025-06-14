@@ -1,9 +1,107 @@
 {
   "AAPL": {
-    "poc": 198.75,
-    "val": 195.75,
-    "vah": 202.75,
-    "near_val": false,
-    "near_vah": false
+    "POC": 198.58,
+    "POC_Move": -2.92,
+    "VAL": 195.64,
+    "VAH": 212.56,
+    "Volume_Clusters": [
+      197.08,
+      197.58,
+      198.08
+    ],
+    "Gaps_Above": [
+      203.58,
+      208.58
+    ],
+    "Gaps_Below": [
+      193.58,
+      188.58
+    ],
+    "Near_VAL": null,
+    "Near_VAH": null
+  },
+  "MSFT": {
+    "POC": 449.45,
+    "POC_Move": -23.3,
+    "VAL": 434.26,
+    "VAH": 477.92,
+    "Volume_Clusters": [
+      447.95,
+      448.45,
+      448.95
+    ],
+    "Gaps_Above": [
+      454.45,
+      459.45
+    ],
+    "Gaps_Below": [
+      444.45,
+      439.45
+    ],
+    "Near_VAL": null,
+    "Near_VAH": null
+  },
+  "TSLA": {
+    "POC": 342.83,
+    "POC_Move": 16.77,
+    "VAL": 277.17,
+    "VAH": 361.07,
+    "Volume_Clusters": [
+      341.33,
+      341.83,
+      342.33
+    ],
+    "Gaps_Above": [
+      347.83,
+      352.83
+    ],
+    "Gaps_Below": [
+      337.83,
+      332.83
+    ],
+    "Near_VAL": null,
+    "Near_VAH": null
+  },
+  "NVDA": {
+    "POC": 135.17,
+    "POC_Move": -7.5,
+    "VAL": 114.2,
+    "VAH": 144.34,
+    "Volume_Clusters": [
+      133.67,
+      134.17,
+      134.67
+    ],
+    "Gaps_Above": [
+      140.17,
+      145.17
+    ],
+    "Gaps_Below": [
+      130.17,
+      125.17
+    ],
+    "Near_VAL": null,
+    "Near_VAH": null
+  },
+  "AMZN": {
+    "POC": 206.06,
+    "POC_Move": -7.07,
+    "VAL": 185.69,
+    "VAH": 216.93,
+    "Volume_Clusters": [
+      204.56,
+      205.06,
+      205.56
+    ],
+    "Gaps_Above": [
+      211.06,
+      216.06
+    ],
+    "Gaps_Below": [
+      201.06,
+      196.06
+    ],
+    "Near_VAL": null,
+    "Near_VAH": null
   }
 }
