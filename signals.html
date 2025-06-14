@@ -1,44 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MarketProEdge Signals</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 2rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 0.75rem;
-      text-align: center;
-    }
-    th {
-      background: #f5f5f5;
-    }
     .tooltip {
       position: relative;
       cursor: pointer;
     }
     .tooltip .tooltiptext {
       visibility: hidden;
-      width: 220px;
       background-color: #333;
       color: #fff;
       text-align: center;
-      border-radius: 4px;
-      padding: 8px;
+      border-radius: 6px;
+      padding: 5px;
       position: absolute;
       z-index: 1;
       bottom: 125%;
       left: 50%;
-      margin-left: -110px;
+      margin-left: -60px;
       opacity: 0;
       transition: opacity 0.3s;
     }
@@ -46,97 +30,152 @@
       visibility: visible;
       opacity: 1;
     }
-    .chart-button {
-      background-color: #007bff;
-      color: #fff;
-      padding: 5px 10px;
-      border: none;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    .chart-modal {
+    .modal {
       display: none;
       position: fixed;
-      z-index: 1000;
+      z-index: 999;
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0,0,0,0.8);
     }
-    .chart-modal-content {
+    .modal-content {
       background-color: #fff;
       margin: 10% auto;
       padding: 20px;
-      border-radius: 8px;
-      width: 80%;
-      height: 400px;
+      border: 1px solid #888;
+      width: 90%;
+      max-width: 700px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover, .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f4f4f4;
     }
   </style>
 </head>
 <body>
+  <header>
+    <div class="logo">📊 MarketProEdge Daily Signals</div>
+  </header>
+  <main>
+    <table id="signalsTable">
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th>POC</th>
+          <th>POC Move</th>
+          <th>VAL</th>
+          <th>VAH</th>
+          <th>Volume Clusters</th>
+          <th>Near VAL</th>
+          <th>Near VAH</th>
+          <th>Chart</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </main>
 
-<h2>📊 MarketProEdge Daily Signals</h2>
-<table id="signals-table">
-  <thead>
-    <tr>
-      <th>Ticker</th>
-      <th>POC (30D)</th>
-      <th>POC Move</th>
-      <th>VAL</th>
-      <th>VAH</th>
-      <th>Volume Clusters</th>
-      <th>Near VAL</th>
-      <th>Near VAH</th>
-      <th>Chart</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
-<div id="chartModal" class="chart-modal">
-  <div class="chart-modal-content">
-    <span onclick="closeModal()" style="float:right; cursor:pointer;">&times;</span>
-    <h3>Chart coming soon...</h3>
-    <!-- You can embed a real chart here later -->
+  <div id="chartModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <canvas id="chartCanvas" width="600" height="400"></canvas>
+    </div>
   </div>
-</div>
 
-<script>
-fetch('marketproedge_signals.json')
-  .then(response => response.json())
-  .then(data => {
-    const tbody = document.querySelector('#signals-table tbody');
-    data.forEach(row => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${row.ticker}</td>
-        <td>${row.poc ?? '—'}</td>
-        <td>${row.poc_movement ?? '—'}</td>
-        <td>${row.val ?? '—'}</td>
-        <td>${row.vah ?? '—'}</td>
-        <td>
-          <div class="tooltip">🧠 Hover
-            <div class="tooltiptext">${(row.volume_clusters || []).join('<br>') || 'None'}</div>
-          </div>
-        </td>
-        <td>${row.near_val ? '✅' : ''}</td>
-        <td>${row.near_vah ? '✅' : ''}</td>
-        <td><button class="chart-button" onclick="openModal('${row.ticker}')">📈 Chart</button></td>
-      `;
-      tbody.appendChild(tr);
-    });
-  });
+  <script>
+    const modal = document.getElementById("chartModal");
+    const span = document.getElementsByClassName("close")[0];
+    const ctx = document.getElementById("chartCanvas").getContext("2d");
+    let chart;
 
-function openModal(ticker) {
-  document.getElementById('chartModal').style.display = 'block';
-  // In future, populate the modal with ticker-specific chart
-}
-function closeModal() {
-  document.getElementById('chartModal').style.display = 'none';
-}
-</script>
+    fetch("marketproedge_signals.json")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById("tableBody");
+        data.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.ticker}</td>
+            <td>${row.poc?.toFixed(2) ?? "—"}</td>
+            <td>${row.poc_move ?? "—"}</td>
+            <td>${row.val?.toFixed(2) ?? "—"}</td>
+            <td>${row.vah?.toFixed(2) ?? "—"}</td>
+            <td class="tooltip">🧠<span class="tooltiptext">${row.volume_clusters?.join(", ") || "None"}</span></td>
+            <td>${row.near_val ? "✅" : ""}</td>
+            <td>${row.near_vah ? "✅" : ""}</td>
+            <td><button onclick="openChart('${row.ticker}')">📈</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
 
+    function openChart(ticker) {
+      fetch(`https://api.twelvedata.com/time_series?symbol=${ticker}&interval=1day&apikey=5e07fabed6494dc8bae837989127d707`)
+        .then(res => res.json())
+        .then(json => {
+          const data = json.values.reverse();
+          const labels = data.map(d => d.datetime);
+          const prices = data.map(d => +d.close);
+
+          if (chart) chart.destroy();
+          chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [
+                {
+                  label: `${ticker} Close`,
+                  data: prices,
+                  borderWidth: 2,
+                  borderColor: 'blue',
+                  fill: false
+                },
+                {
+                  label: 'POC',
+                  data: new Array(prices.length).fill(prices[Math.floor(prices.length/2)]),
+                  borderColor: 'red',
+                  borderWidth: 1,
+                  borderDash: [5, 5],
+                  fill: false
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { position: 'top' }
+              }
+            }
+          });
+          modal.style.display = "block";
+        });
+    }
+
+    span.onclick = () => modal.style.display = "none";
+    window.onclick = e => { if (e.target == modal) modal.style.display = "none"; };
+  </script>
 </body>
 </html>
