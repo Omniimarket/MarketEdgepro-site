@@ -142,56 +142,67 @@
     </div>
   </div>
 
-  <script>
-    // Log a message to confirm the script is running
-    console.log("Fetching JSON data...");
+ <script>
+  console.log("Fetching JSON data…");
 
-    fetch("marketproedge_signals.json")
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log("Data loaded:", data);
-        const tableBody = document.getElementById("tableBody");
+  fetch("marketproedge_signals.json")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Fetched Data:", data);
+      let signalsArray;
+      
+      // Check if the returned data is an array, or if it's wrapped in an object
+      if (Array.isArray(data)) {
+        signalsArray = data;
+      } else if (Array.isArray(data.signals)) {
+        signalsArray = data.signals;
+      } else {
+        console.error("No valid signals array found in JSON", data);
+        return;
+      }
 
-        data.forEach(info => {
-          const row = document.createElement("tr");
+      const tableBody = document.getElementById("tableBody");
 
-          // Use ternary operators for null or missing values
-          row.innerHTML = `
-            <td>${info.ticker}</td>
-            <td>${info.POC !== null ? info.POC : "—"}</td>
-            <td>${info.POC_Move !== null ? info.POC_Move : "—"}</td>
-            <td>${info.VAL !== null ? info.VAL : "—"}</td>
-            <td>${info.VAH !== null ? info.VAH : "—"}</td>
-            <td>
-              <button class="tooltip">🧠 Hover
-                <span class="tooltiptext">${(info.Volume_Clusters || []).join(", ")}</span>
-              </button>
-            </td>
-            <td>${(info.Gaps_Above || []).join(", ") || "—"}</td>
-            <td>${(info.Gaps_Below || []).join(", ") || "—"}</td>
-            <td>${info.Near_VAL !== null ? "✅" : ""}</td>
-            <td>${info.Near_VAH !== null ? "✅" : ""}</td>
-            <td>
-              <button onclick="showChart('${info.ticker}')">📈 Chart</button>
-            </td>
-          `;
+      signalsArray.forEach(info => {
+        const row = document.createElement("tr");
 
-          tableBody.appendChild(row);
-        });
-      })
-      .catch(error => {
-        console.error("❌ Error loading signals:", error);
+        row.innerHTML = `
+          <td>${info.ticker}</td>
+          <td>${info.POC !== null ? info.POC : "—"}</td>
+          <td>${info.POC_Move !== null ? info.POC_Move : "—"}</td>
+          <td>${info.VAL !== null ? info.VAL : "—"}</td>
+          <td>${info.VAH !== null ? info.VAH : "—"}</td>
+          <td>
+            <button class="tooltip">🧠 Hover
+              <span class="tooltiptext">${(info.Volume_Clusters || []).join(", ")}</span>
+            </button>
+          </td>
+          <td>${(info.Gaps_Above || []).join(", ") || "—"}</td>
+          <td>${(info.Gaps_Below || []).join(", ") || "—"}</td>
+          <td>${info.Near_VAL !== null ? "✅" : ""}</td>
+          <td>${info.Near_VAH !== null ? "✅" : ""}</td>
+          <td>
+            <button onclick="showChart('${info.ticker}')">📈 Chart</button>
+          </td>
+        `;
+
+        tableBody.appendChild(row);
       });
+    })
+    .catch(error => {
+      console.error("❌ Error loading signals:", error);
+    });
 
-    function showChart(ticker) {
-      alert(`Chart for ${ticker} coming soon!`);
-    }
-  </script>
+  function showChart(ticker) {
+    alert(`Chart for ${ticker} coming soon!`);
+  }
+</script>
+
 
 </body>
 </html>
