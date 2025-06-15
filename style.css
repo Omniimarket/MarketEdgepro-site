@@ -232,15 +232,35 @@ footer {
     gap: 20px;
     padding: 20px;
 }
+#marketPulseContainer {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Left side takes 2x space, right side takes 1x */
+    gap: 20px;
+    padding: 20px;
+    align-items: start; /* Ensures widgets align properly */
+}
 
 /* Left Side: Ticker Section */
 #tickerSection {
-    flex: 2;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 /* Right Side: Widget Section */
 #widgetSection {
-    flex: 1;
-    max-width: 300px; /* Adjust width as needed */
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 300px; /* Keeps widgets compact */
+}
+
+/* Widget Styling */
+.widget {
+    border: 1px solid #e0e3eb;
+    padding: 10px;
+    border-radius: 8px;
 }
 
