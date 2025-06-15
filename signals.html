@@ -5,47 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MarketProEdge - Signals</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  </section>
-<header>
-  <div class="logo">📊 MarketProEdge</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="signals.html">Signals</a>
-    <a href="#">Login</a>
-  </nav>
-</header>
+  <header>
+    <div class="logo">📊 MarketProEdge</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="signals.html">Signals</a>
+      <a href="#">Login</a>
+    </nav>
+  </header>
 
-<main>
-  <h2 style="text-align: center;">Volume Profile Signals</h2>
-  <div id="tickerContainer" class="ticker-grid"></div>
-</main>
+  <main>
+    <h2 style="text-align: center;">Volume Profile Signals</h2>
+    <!-- Container for the ticker boxes -->
+    <div id="tickerContainer" class="ticker-grid"></div>
+  </main>
 
-<script src="script.js"></script>
-<!-- Somewhere in your body, for example right below your ticker boxes -->
-<div id="tickerContainer" class="ticker-grid"></div>
-
-<!-- Add a canvas for the chart -->
-<canvas id="myChart" width="400" height="200"></canvas>
-
-<!-- Your existing scripts -->
-<script src="script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- Existing ticker container -->
-<div id="tickerContainer" class="ticker-grid"></div>
-
-<!-- Modal for the chart -->
-<div id="chartModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <canvas id="myChart" width="600" height="400"></canvas>
+  <!-- Modal for the chart -->
+  <div id="chartModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <canvas id="myChart" width="600" height="400"></canvas>
+    </div>
   </div>
-</div>
 
-<!-- Include Chart.js and your script -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="script.js"></script>
+  <!-- Scripts (load Chart.js and your custom script only once) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
