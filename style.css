@@ -225,15 +225,6 @@ footer {
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
-#marketPulseContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Ensures widgets stay at the top */
-    gap: 20px;
-    padding: 20px;
-}
-
-/* Left Side: Ticker Section */
 #tickerSection {
     flex: 2;
     background: #fff;
@@ -262,19 +253,42 @@ footer {
     padding: 20px;
 }
 
-/* Right Side: Widget Section */
-#widgetSection {
-    flex: 1;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* Ticker Box Styling */
+.ticker-box {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
 }
 
-/* Widget Styling */
-.widget {
-    border: 1px solid #e0e3eb;
-    padding: 10px;
-    border-radius: 8px;
-    background: #fff;
+.ticker-box:hover {
+    transform: scale(1.05);
+}
+
+.ticker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.trend-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.view-details {
+    background-color: #3498db;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.view-details:hover {
+    background-color: #2980b9;
 }
