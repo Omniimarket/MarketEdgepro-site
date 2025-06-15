@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MarketProEdge - Market Pulse</title>
+  <title>MarketProEdge - Uncover Market Insights</title>
   <!-- AOS CSS for scroll animations -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <style>
     /* Basic Reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
@@ -38,7 +41,7 @@
       transition: color 0.3s ease;
     }
     header nav a:hover {
-      color: #f4f4f4;
+      color: #ddd;
     }
 
     /* Hero Section */
@@ -54,7 +57,7 @@
       color: #fff;
     }
     #hero h1 {
-      font-size: 2.5em;
+      font-size: 2.8em;
       margin-bottom: 20px;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
     }
@@ -78,43 +81,49 @@
       background-color: #cf711f;
     }
 
-    /* Market Pulse Section (Signals) */
-    #market-pulse {
+    /* Pricing Section */
+    #pricing {
       padding: 50px 20px;
       background-color: #fff;
     }
-    #market-pulse h2 {
+    #pricing h2 {
       text-align: center;
       margin-bottom: 40px;
       font-size: 2em;
     }
-    .ticker-grid {
+    .pricing-plans {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
     }
-    .ticker-box {
+    .plan {
       background: #fafafa;
       border: 1px solid #ddd;
       border-radius: 6px;
-      padding: 20px;
+      padding: 30px 20px;
       width: 280px;
+      text-align: center;
       transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
     }
-    .ticker-box:hover {
+    .plan:hover {
       transform: translateY(-5px);
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    .ticker-box h3 {
-      margin-bottom: 10px;
+    .plan h3 {
+      margin-bottom: 15px;
+      font-size: 1.8em;
     }
-    .ticker-box p {
-      font-size: 0.95em;
-      margin-bottom: 8px;
+    .plan p {
+      font-size: 1em;
+      margin-bottom: 20px;
     }
-    .ticker-box button {
+    .plan .price {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #e67e22;
+    }
+    .plan button {
       background-color: #3498db;
       color: #fff;
       border: none;
@@ -123,14 +132,43 @@
       cursor: pointer;
       transition: background-color 0.2s ease;
     }
-    .ticker-box button:hover {
+    .plan button:hover {
       background-color: #2980b9;
+    }
+
+    /* Market Pulse Preview Section (teaser on main page) */
+    #market-pulse-preview {
+      padding: 50px 20px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+    #market-pulse-preview h2 {
+      margin-bottom: 30px;
+      font-size: 2em;
+    }
+    .preview-text {
+      max-width: 800px;
+      margin: 0 auto 20px;
+      font-size: 1.1em;
+    }
+    .preview-link {
+      background-color: #e67e22;
+      color: #fff;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 1.1em;
+      transition: background-color 0.2s ease;
+    }
+    .preview-link:hover {
+      background-color: #cf711f;
     }
 
     /* News Section */
     #news {
       padding: 50px 20px;
-      background-color: #f9f9f9;
+      background-color: #fff;
     }
     #news h2 {
       text-align: center;
@@ -143,14 +181,14 @@
       justify-content: center;
       gap: 30px;
     }
-    /* Example news widget placeholder */
     .news-widget, .twitter-widget {
-      background-color: #fff;
+      background-color: #fafafa;
       border: 1px solid #ddd;
       padding: 20px;
       width: 500px;
       border-radius: 6px;
     }
+
     /* Footer */
     footer {
       background-color: #333;
@@ -159,9 +197,9 @@
       padding: 20px;
     }
 
-    /* Modal styles */
+    /* Modal styles for interactive chart (if used on other pages/details) */
     .modal {
-      display: none; /* Hidden by default */
+      display: none;
       position: fixed;
       z-index: 1000;
       left: 0;
@@ -211,7 +249,8 @@
     <div class="logo">MarketProEdge</div>
     <nav>
       <a href="index.html">Home</a>
-      <a href="signals.html">Market Pulse</a>
+      <!-- Link to a dedicated Market Pulse page (or section) -->
+      <a href="market-pulse.html">Market Pulse</a>
       <a href="news.html">News</a>
       <a href="login.html">Login</a>
     </nav>
@@ -219,24 +258,50 @@
 
   <!-- Hero Section -->
   <section id="hero" data-aos="fade-up">
-    <h1>MarketProEdge: Uncover Market Insights That Drive Smarter Decisions</h1>
-    <p>Enjoy real-time analysis—including volume profiles, RSI & moving averages—plus curated news that empowers your trade ideas.</p>
-    <a href="signup.html" class="cta-button">Start Your Free Analysis</a>
+    <h1>MarketProEdge: Empower Your Market Decisions</h1>
+    <p>Real-time analysis, expert insights, and curated stock market news—all in one platform.</p>
+    <a href="signup.html" class="cta-button">Get Started For Free</a>
   </section>
 
-  <!-- Market Pulse Section (formerly Signals) -->
-  <section id="market-pulse" data-aos="fade-up">
-    <h2>Market Pulse</h2>
-    <div id="tickerContainer" class="ticker-grid">
-      <!-- Ticker boxes will be dynamically injected here via script.js -->
+  <!-- Pricing Section -->
+  <section id="pricing" data-aos="fade-up">
+    <h2>Choose Your Plan</h2>
+    <div class="pricing-plans">
+      <div class="plan">
+        <h3>Free Plan</h3>
+        <p>Access limited insights and news updates</p>
+        <p class="price">$0<span style="font-size:0.7em;">/mo</span></p>
+        <button onclick="window.location.href='signup.html'">Sign Up</button>
+      </div>
+      <div class="plan">
+        <h3>Pro Plan</h3>
+        <p>Unlock full market insights, detailed analysis, and advanced tools</p>
+        <p class="price">$29<span style="font-size:0.7em;">/mo</span></p>
+        <button onclick="window.location.href='signup.html'">Get Pro</button>
+      </div>
+      <div class="plan">
+        <h3>Premium Plan</h3>
+        <p>Includes everything in Pro plus exclusive expert webinars and more</p>
+        <p class="price">$49<span style="font-size:0.7em;">/mo</span></p>
+        <button onclick="window.location.href='signup.html'">Go Premium</button>
+      </div>
     </div>
+  </section>
+
+  <!-- Market Pulse Preview Section -->
+  <section id="market-pulse-preview" data-aos="fade-up">
+    <h2>Market Pulse Overview</h2>
+    <p class="preview-text">
+      Curious about our real-time market insights? Our Market Pulse feature delivers detailed analysis and metrics for the stocks you care about. Dive into the data by checking out our full Market Pulse dashboard.
+    </p>
+    <a href="market-pulse.html" class="preview-link">View Full Market Pulse</a>
   </section>
 
   <!-- News Section -->
   <section id="news" data-aos="fade-up">
     <h2>USA Stock Market News</h2>
     <div class="news-container">
-      <!-- Example TradingView News Widget -->
+      <!-- TradingView News Widget -->
       <div class="news-widget">
         <div class="tradingview-widget-container">
           <div id="tradingview_news_widget"></div>
@@ -263,7 +328,7 @@
           </script>
         </div>
       </div>
-      <!-- Example Twitter Timeline Widget -->
+      <!-- Twitter Timeline Widget -->
       <div class="twitter-widget">
         <a class="twitter-timeline" href="https://twitter.com/WalterBloomberg?ref_src=twsrc%5Etfw">Tweets by WalterBloomberg</a>
         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -273,10 +338,10 @@
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2025 MarketProEdge | <a style="color: inherit;" href="about.html">Learn more about our methodology</a></p>
+    <p>&copy; 2025 MarketProEdge | <a style="color: inherit;" href="about.html">Our Methodology</a></p>
   </footer>
 
-  <!-- Modal for Interactive Chart -->
+  <!-- (Optional) Modal for Interactive Chart - can be employed on your full Market Pulse page -->
   <div id="chartModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
@@ -284,7 +349,7 @@
     </div>
   </div>
 
-  <!-- Scripts: Chart.js, AOS, and custom script -->
+  <!-- Scripts: Chart.js, AOS, and custom main page functionality -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
@@ -293,105 +358,7 @@
       duration: 1000,
       once: true,
     });
-  </script>
-  <!-- Custom script that handles Market Pulse and modal chart (ensure only one copy is loaded) -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // Only run if ticker container is present
-      if (!document.getElementById("tickerContainer")) return;
-      
-      console.log("Custom Market Pulse script running...");
-
-      // Replace this URL with your actual JSON data source if needed
-      fetch("./marketproedge_signals.json")
-        .then(response => {
-          if (!response.ok) throw new Error("Network response was not okay: " + response.statusText);
-          return response.json();
-        })
-        .then(data => {
-          console.log("Fetched JSON Data:", data);
-          const container = document.getElementById("tickerContainer");
-          container.innerHTML = "";
-          Object.keys(data).forEach(ticker => {
-            const info = data[ticker];
-            if (Object.keys(info).length === 0) return;
-
-            // Create ticker box div
-            const box = document.createElement("div");
-            box.classList.add("ticker-box");
-            box.innerHTML = `
-              <h3>${ticker}</h3>
-              <p><strong>Point of Control (1H):</strong> ${info.POC_1h ?? "No Data"}</p>
-              <p><strong>Upper Trading Level (1H):</strong> ${info.VAH_1h ?? "No Data"}</p>
-              <p><strong>Lower Trading Level (1H):</strong> ${info.VAL_1h ?? "No Data"}</p>
-              <p><strong>Point of Control (Daily):</strong> ${info.POC_1day ?? "No Data"}</p>
-              <p><strong>Upper Trading Level (Daily):</strong> ${info.VAH_1day ?? "No Data"}</p>
-              <p><strong>Lower Trading Level (Daily):</strong> ${info.VAL_1day ?? "No Data"}</p>
-              <button class="view-chart">View Chart</button>
-            `;
-            // Bind click event for modal chart
-            box.querySelector("button.view-chart").addEventListener("click", function () {
-              drawChart(ticker, info);
-              openModal();
-            });
-            container.appendChild(box);
-          });
-        })
-        .catch(error => {
-          console.error("Error fetching market data:", error);
-        });
-
-      // Modal logic
-      function openModal() {
-        document.getElementById("chartModal").classList.add("show");
-      }
-      document.querySelector(".modal-content .close").addEventListener("click", function () {
-        document.getElementById("chartModal").classList.remove("show");
-      });
-
-      // Chart drawing function using Chart.js
-      function drawChart(ticker, info) {
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const chartData = {
-          labels: ["Point of Control", "Upper Trading Level", "Lower Trading Level"],
-          datasets: [
-            {
-              label: "1H",
-              data: [info.POC_1h || null, info.VAH_1h || null, info.VAL_1h || null],
-              backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            },
-            {
-              label: "Daily",
-              data: [info.POC_1day || null, info.VAH_1day || null, info.VAL_1day || null],
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            }
-          ]
-        };
-
-        // If an existing chart exists, destroy it before creating a new one
-        if (window.myChartInstance) window.myChartInstance.destroy();
-
-        window.myChartInstance = new Chart(ctx, {
-          type: 'bar',
-          data: chartData,
-          options: {
-            responsive: true,
-            plugins: {
-              title: {
-                display: true,
-                text: `Market Pulse for ${ticker}`
-              },
-              tooltip: {
-                enabled: true
-              }
-            },
-            animation: {
-              duration: 800
-            }
-          }
-        });
-      }
-    });
+    // Optionally, you can add JavaScript here for modal charts on your dedicated Market Pulse page
   </script>
 </body>
 </html>
