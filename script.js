@@ -56,6 +56,29 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch(error => {
       console.error("❌ Error loading signals:", error);
     });
+document.getElementById("searchTicker").addEventListener("input", function () {
+  const searchTerm = this.value.toUpperCase();
+  const suggestions = document.getElementById("suggestions");
+  suggestions.innerHTML = ""; // Clear previous suggestions
+
+  document.querySelectorAll(".ticker-box").forEach(box => {
+    const symbol = box.getAttribute("data-symbol");
+    if (symbol.includes(searchTerm)) {
+      box.style.display = "block";
+
+      // Add matching stock to suggestions
+      const suggestionItem = document.createElement("li");
+      suggestionItem.innerText = symbol;
+      suggestionItem.addEventListener("click", function () {
+        document.getElementById("searchTicker").value = symbol;
+        suggestions.innerHTML = ""; // Clear suggestions
+      });
+      suggestions.appendChild(suggestionItem);
+    } else {
+      box.style.display = "none";
+    }
+  });
+});
 
   // Function to open the modal
   function openModal() {
