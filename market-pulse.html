@@ -38,9 +38,10 @@
 <div id="marketPulseContainer">
     <!-- Left Side: Ticker List -->
     <div id="tickerSection">
+        <h2>Volume Profile Signals</h2>
         <input type="text" id="searchTicker" placeholder="Search for a stock..." />
         <ul id="suggestions"></ul>
-        <div id="tickerContainer"></div>
+        <div id="tickerContainer" class="ticker-grid"></div>
     </div>
 
     <!-- Right Side: Widgets -->
@@ -57,38 +58,52 @@
         </div>
 
         <!-- TradingView Market Overview Widget -->
-        <div class="widget">
+        <div class="widget tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <div class="tradingview-widget-copyright">
+                <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
+                    <span class="blue-text">Track all markets on TradingView</span>
+                </a>
+            </div>
             <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
             {
-                "title": "Market Overview",
+                "colorTheme": "dark",
+                "dateRange": "12M",
                 "showChart": true,
                 "locale": "en",
-                "largeChartUrl": "",
-                "width": "100%",
-                "height": "400",
+                "width": "400",
+                "height": "550",
                 "isTransparent": false,
-                "symbolsGroups": [
+                "showSymbolLogo": true,
+                "tabs": [
                     {
-                        "name": "Indices",
+                        "title": "Indices",
                         "symbols": [
-                            { "s": "FOREXCOM:SPXUSD", "d": "S&P 500" },
-                            { "s": "FOREXCOM:NSXUSD", "d": "Nasdaq 100" },
-                            { "s": "FOREXCOM:DJI", "d": "Dow Jones" }
+                            { "s": "FOREXCOM:SPXUSD", "d": "S&P 500 Index" },
+                            { "s": "FOREXCOM:NSXUSD", "d": "US 100 Cash CFD" },
+                            { "s": "FOREXCOM:DJI", "d": "Dow Jones Industrial Average Index" }
                         ]
                     },
                     {
-                        "name": "Forex",
+                        "title": "Forex",
                         "symbols": [
-                            { "s": "FX:EURUSD", "d": "EUR/USD" },
-                            { "s": "FX:GBPUSD", "d": "GBP/USD" },
-                            { "s": "FX:USDJPY", "d": "USD/JPY" }
+                            { "s": "FX:EURUSD", "d": "EUR to USD" },
+                            { "s": "FX:GBPUSD", "d": "GBP to USD" },
+                            { "s": "FX:USDJPY", "d": "USD to JPY" }
                         ]
                     },
                     {
-                        "name": "Crypto",
+                        "title": "Futures",
                         "symbols": [
-                            { "s": "BITSTAMP:BTCUSD", "d": "Bitcoin" },
-                            { "s": "BITSTAMP:ETHUSD", "d": "Ethereum" }
+                            { "s": "BMFBOVESPA:ISP1!", "d": "S&P 500 Index Futures" },
+                            { "s": "PYTH:WTI3!", "d": "WTI CRUDE OIL" }
+                        ]
+                    },
+                    {
+                        "title": "Bonds",
+                        "symbols": [
+                            { "s": "EUREX:FGBL1!", "d": "Euro Bund" },
+                            { "s": "EUREX:FBTP1!", "d": "Euro BTP" }
                         ]
                     }
                 ]
@@ -117,6 +132,7 @@
         </div>
     </div>
 </div>
+
 
 
 
