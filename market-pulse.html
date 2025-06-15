@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MarketProEdge - Signals</title>
+  <title>MarketProEdge - Market Pulse</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,36 +11,21 @@
     <div class="logo">📊 MarketProEdge</div>
     <nav>
       <a href="index.html">Home</a>
-       <a href="market-pulse.html">Market Pulse</a>
+      <a href="market-pulse.html">Market Pulse</a>
       <a href="#">Login</a>
     </nav>
   </header>
-<input type="text" id="searchTicker" placeholder="Search for a stock..." />
-<div id="tickerContainer"></div>
-  <main>
-    <h2 style="text-align: center;">Volume Profile Signals</h2>
-    <!-- Container for the ticker boxes -->
-    <div id="tickerContainer" class="ticker-grid"></div>
-  </main>
 
-  <!-- Modal for the chart -->
-  <div id="chartModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <canvas id="myChart" width="600" height="400"></canvas>
-    </div>
-  </div>
-
-  <!-- Scripts (load Chart.js and your custom script only once) -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="script.js"></script>
-
-<div id="marketPulseContainer">
+  <!-- Main Container -->
+  <div id="marketPulseContainer">
+    
     <!-- Left Side: Ticker List -->
     <div id="tickerSection">
         <h2>Volume Profile Signals</h2>
         <input type="text" id="searchTicker" placeholder="Search for a stock..." />
         <ul id="suggestions"></ul>
+        
+        <!-- Ticker List (Now Below Search Bar) -->
         <div id="tickerContainer" class="ticker-grid"></div>
     </div>
 
@@ -109,10 +94,19 @@
             </script>
         </div>
     </div>
-</div>
+  </div>
 
+  <!-- Modal for the chart -->
+  <div id="chartModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <canvas id="myChart" width="600" height="400"></canvas>
+    </div>
+  </div>
 
-
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
 
 </body>
 </html>
