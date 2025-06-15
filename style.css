@@ -226,13 +226,6 @@ footer {
   margin-bottom: 0.5rem;
 }
 #marketPulseContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 20px;
-}
-#marketPulseContainer {
     display: grid;
     grid-template-columns: 2fr 1fr; /* Left side takes 2x space, right side takes 1x */
     gap: 20px;
@@ -262,5 +255,5 @@ footer {
     border: 1px solid #e0e3eb;
     padding: 10px;
     border-radius: 8px;
+    margin-bottom: 20px; /* Adds spacing between widgets */
 }
-
