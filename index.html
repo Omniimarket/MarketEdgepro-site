@@ -1,227 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MarketProEdge provides expert market insights, analysis tools, and curated stock market news.">
   <title>MarketProEdge - Uncover Market Insights</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script">
+  
   <!-- AOS CSS for scroll animations -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
   <style>
-    /* Basic Reset */
+    /* CSS Variables for easy theming */
+    :root {
+      --primary-color: #e67e22;
+      --primary-hover: #cf711f;
+      --dark-bg: #333;
+      --light-bg: #f4f4f4;
+      --card-bg: #fafafa;
+      --text-light: #fff;
+      --text-dark: #333;
+      --border-color: #ddd;
+      --shadow: 0 4px 8px rgba(0,0,0,0.1);
+      --transition: all 0.3s ease;
+    }
+
+    /* Base Styles */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: var(--light-bg);
       line-height: 1.6;
-      color: #333;
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition);
+    }
+
+    /* Layout Components */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .section {
+      padding: 4rem 0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.8rem;
+      border-radius: 4px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: var(--text-light);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-3px);
     }
 
     /* Header */
     header {
-      background-color: #333;
-      color: #fff;
-      padding: 20px 10%;
+      background-color: var(--dark-bg);
+      color: var(--text-light);
+      padding: 1.2rem 5%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    header .logo {
-      font-size: 1.5em;
-      font-weight: bold;
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
     }
-    header nav a {
-      color: #fff;
-      text-decoration: none;
-      margin-left: 15px;
-      font-size: 1em;
-      transition: color 0.3s ease;
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
     }
-    header nav a:hover {
+
+    nav a:hover {
       color: #ddd;
     }
 
     /* Hero Section */
     #hero {
-      background: url('https://source.unsplash.com/1600x900/?stock,market') no-repeat center/cover;
-      min-height: 60vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                  url('https://source.unsplash.com/1600x900/?stock,market') no-repeat center/cover;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 40px 20px;
-      color: #fff;
+      padding: 0 20px;
+      color: var(--text-light);
+      margin-top: -68px; /* Offset fixed header */
+      padding-top: 68px;
     }
+
     #hero h1 {
-      font-size: 2.8em;
-      margin-bottom: 20px;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      margin-bottom: 1.5rem;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
     }
+
     #hero p {
-      font-size: 1.2em;
-      margin-bottom: 30px;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      max-width: 800px;
+      margin: 0 auto 2rem;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
     }
-    .cta-button {
-      background-color: #e67e22;
-      color: #fff;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 4px;
-      font-size: 1.1em;
-      text-decoration: none;
-      transition: transform 0.2s ease, background-color 0.2s ease;
-    }
-    .cta-button:hover {
-      transform: translateY(-3px);
-      background-color: #cf711f;
-    }
 
-    /* Key Features Section */
-    #features {
-      padding: 50px 20px;
-      background-color: #fff;
-      text-align: center;
-    }
-    #features h2 {
-      font-size: 2em;
-      margin-bottom: 30px;
-    }
+    /* Features Grid */
     .features-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-    }
-    .feature-card {
-      background: #fafafa;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 30px;
-      width: 280px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .feature-card h3 {
-      margin-bottom: 15px;
-      font-size: 1.5em;
-    }
-    .feature-card p {
-      font-size: 0.95em;
-      margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
     }
 
-    /* Market Pulse Preview Section */
-    #market-pulse-preview {
-      padding: 50px 20px;
-      background-color: #f9f9f9;
-      text-align: center;
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 2rem;
+      transition: var(--transition);
     }
-    #market-pulse-preview h2 {
-      margin-bottom: 30px;
-      font-size: 2em;
-    }
-    .preview-text {
-      max-width: 800px;
-      margin: 0 auto 20px auto;
-      font-size: 1.1em;
-    }
-    .preview-link {
-      background-color: #e67e22;
-      color: #fff;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 1.1em;
-      transition: background-color 0.2s ease;
-    }
-    .preview-link:hover {
-      background-color: #cf711f;
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
     }
 
     /* News Section */
-    #news {
-      padding: 50px 20px;
-      background-color: #fff;
+    .news-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
     }
-    #news h2 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 2em;
-    }
-    #news .news-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-    }
-    .news-widget, .twitter-widget {
-      background-color: #fafafa;
-      border: 1px solid #ddd;
-      padding: 20px;
-      width: 500px;
+
+    .widget {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
       border-radius: 6px;
     }
 
     /* Footer */
     footer {
-      background-color: #333;
-      color: #fff;
+      background-color: var(--dark-bg);
+      color: var(--text-light);
       text-align: center;
-      padding: 20px;
+      padding: 2rem;
     }
 
-    /* Modal (for Market Pulse details if used on another page) - Optional here */
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
-      z-index: 1000;
-      left: 0;
       top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      overflow-y: auto;
       background-color: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
       opacity: 0;
       transition: opacity 0.3s ease;
     }
+
     .modal.show {
-      display: block;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       opacity: 1;
     }
+
     .modal-content {
-      background-color: #fefefe;
-      margin: 8% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      max-width: 800px;
+      background-color: #fff;
+      padding: 2rem;
       border-radius: 8px;
+      max-width: 800px;
+      width: 90%;
       position: relative;
-      transform: translateY(-20px);
-      transition: transform 0.3s ease;
     }
-    .modal.show .modal-content {
-      transform: translateY(0);
-    }
-    .modal-content .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
+
+    .close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
       cursor: pointer;
     }
-    .modal-content .close:hover,
-    .modal-content .close:focus {
-      color: #000;
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      nav {
+        gap: 1rem;
+      }
+      
+      .section {
+        padding: 3rem 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        flex-direction: column;
+        padding: 1rem;
+      }
+      
+      nav {
+        margin-top: 1rem;
+      }
     }
   </style>
 </head>
@@ -231,7 +275,6 @@
     <div class="logo">MarketProEdge</div>
     <nav>
       <a href="index.html">Home</a>
-      <!-- Link to a dedicated Market Pulse page -->
       <a href="market-pulse.html">Market Pulse</a>
       <a href="news.html">News</a>
       <a href="login.html">Login</a>
@@ -240,88 +283,93 @@
 
   <!-- Hero Section -->
   <section id="hero" data-aos="fade-up">
-    <h1>MarketProEdge: Empower Your Market Decisions</h1>
-    <p>Access expert insights, dynamic analysis tools, and curated stock market news—all on one platform.</p>
-    <a href="signup.html" class="cta-button">Get Started</a>
+    <div class="container">
+      <h1>MarketProEdge: Empower Your Market Decisions</h1>
+      <p>Access expert insights, dynamic analysis tools, and curated stock market news—all on one platform.</p>
+      <a href="signup.html" class="btn btn-primary">Get Started</a>
+    </div>
   </section>
 
   <!-- Key Features Section -->
-  <section id="features" data-aos="fade-up">
-    <h2>Key Features</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <h3>Interactive Charts</h3>
-        <p>Explore dynamic charts that bring real-time market data to life with impactful animations.</p>
-      </div>
-      <div class="feature-card">
-        <h3>Data-Driven Insights</h3>
-        <p>Access high-quality indicators—from volume profiles to RSI & moving averages—that drive informed decisions.</p>
-      </div>
-      <div class="feature-card">
-        <h3>Curated Market News</h3>
-        <p>Stay in the loop with the latest USA stock market news from top sources and expert broadcasters.</p>
+  <section id="features" class="section">
+    <div class="container">
+      <h2 class="section-title">Key Features</h2>
+      <div class="features-grid">
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+          <h3>Interactive Charts</h3>
+          <p>Explore dynamic charts that bring real-time market data to life with impactful animations.</p>
+        </div>
+        <div class="card" data-aos="fade-up" data-aos-delay="200">
+          <h3>Data-Driven Insights</h3>
+          <p>Access high-quality indicators—from volume profiles to RSI & moving averages—that drive informed decisions.</p>
+        </div>
+        <div class="card" data-aos="fade-up" data-aos-delay="300">
+          <h3>Curated Market News</h3>
+          <p>Stay in the loop with the latest USA stock market news from top sources and expert broadcasters.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Market Pulse Preview Section -->
-  <section id="market-pulse-preview" data-aos="fade-up">
-    <h2>Market Pulse Preview</h2>
-    <p class="preview-text">
-      Get a sneak peek at our in-depth market data analysis from our exclusive Market Pulse feature.
-      Discover detailed insights and interactive charts that help you pinpoint market trends.
-    </p>
-    <a href="market-pulse.html" class="preview-link">View Full Market Pulse</a>
+  <section id="market-pulse-preview" class="section" style="background-color: #f9f9f9;">
+    <div class="container">
+      <h2 class="section-title">Market Pulse Preview</h2>
+      <p class="preview-text">
+        Get a sneak peek at our in-depth market data analysis from our exclusive Market Pulse feature.
+        Discover detailed insights and interactive charts that help you pinpoint market trends.
+      </p>
+      <div class="text-center">
+        <a href="market-pulse.html" class="btn btn-primary">View Full Market Pulse</a>
+      </div>
+    </div>
   </section>
 
   <!-- News Section -->
-  <section id="news" data-aos="fade-up">
-    <h2>USA Stock Market News</h2>
-    <div class="news-container">
-      <!-- TradingView News Widget -->
-      <div class="news-widget">
-        <div class="tradingview-widget-container">
-          <div id="tradingview_news_widget"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-news.js" async>
-          {
+  <section id="news" class="section">
+    <div class="container">
+      <h2 class="section-title">USA Stock Market News</h2>
+      <div class="news-container">
+        <!-- TradingView News Widget -->
+        <div class="widget">
+          <div class="tradingview-widget-container">
+            <div id="tradingview_news_widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-news.js" async>
+            {
               "feedMode": "market",
               "title": "Market News",
               "locale": "en",
               "symbols": [
-                {
-                  "s": "NASDAQ:AAPL",
-                  "d": "Apple"
-                },
-                {
-                  "s": "NASDAQ:MSFT",
-                  "d": "Microsoft"
-                }
+                {"s": "NASDAQ:AAPL", "d": "Apple"},
+                {"s": "NASDAQ:MSFT", "d": "Microsoft"}
               ],
               "colorTheme": "light",
               "isTransparent": false,
               "width": "100%",
               "height": "400"
-          }
-          </script>
+            }
+            </script>
+          </div>
         </div>
-      </div>
-      <!-- Twitter Timeline Widget -->
-      <div class="twitter-widget">
-        <a class="twitter-timeline" href="https://twitter.com/WalterBloomberg?ref_src=twsrc%5Etfw">Tweets by WalterBloomberg</a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        
+        <!-- Twitter Timeline Widget -->
+        <div class="widget">
+          <a class="twitter-timeline" href="https://twitter.com/WalterBloomberg?ref_src=twsrc%5Etfw">Tweets by WalterBloomberg</a>
+          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-
-    <footer>
-    <p>© 2025 MarketProEdge | <a style="color: inherit;" href="privacy.html">Privacy Policy</a></p>
-    <p>Disclaimer: Content is for informational purposes only, not investment advice. Consult a financial advisor. We earn commissions from affiliate links.</p>
+  <footer>
+    <div class="container">
+      <p>© 2025 MarketProEdge | <a href="privacy.html">Privacy Policy</a></p>
+      <p>Disclaimer: Content is for informational purposes only, not investment advice. Consult a financial advisor. We earn commissions from affiliate links.</p>
+    </div>
   </footer>
- 
 
-  <!-- Optional: Modal for Interactive Chart on Market Pulse pages -->
+  <!-- Modal -->
   <div id="chartModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
@@ -329,14 +377,31 @@
     </div>
   </div>
 
-  <!-- Scripts: Chart.js, AOS, and initialization of AOS -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Initialize AOS for scroll animations
-    AOS.init({
-      duration: 1000,
-      once: true,
+    // Initialize AOS
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        duration: 800,
+        once: true,
+        easing: 'ease-out-quad'
+      });
+      
+      // Modal functionality
+      const modal = document.getElementById('chartModal');
+      const closeBtn = document.querySelector('.close');
+      
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('show');
+      });
+      
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('show');
+        }
+      });
     });
   </script>
 </body>
