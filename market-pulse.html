@@ -48,15 +48,6 @@
     <div id="widgetSection">
         <h2>Market Insights</h2>
 
-        <!-- Finnhub ETF Holdings Widget -->
-        <div class="widget">
-            <iframe width="100%" frameBorder="0"
-                    height="300px"
-                    src="https://widget.finnhub.io/widgets/etf-holdings?symbol=spy&theme=light" 
-                    title="SPY Holdings Data by Finnhub Stock API">
-            </iframe>
-        </div>
-
         <!-- TradingView Market Overview Widget -->
         <div class="widget tradingview-widget-container">
             <div class="tradingview-widget-container__widget"></div>
@@ -83,32 +74,19 @@
                             { "s": "FOREXCOM:NSXUSD", "d": "US 100 Cash CFD" },
                             { "s": "FOREXCOM:DJI", "d": "Dow Jones Industrial Average Index" }
                         ]
-                    },
-                    {
-                        "title": "Forex",
-                        "symbols": [
-                            { "s": "FX:EURUSD", "d": "EUR to USD" },
-                            { "s": "FX:GBPUSD", "d": "GBP to USD" },
-                            { "s": "FX:USDJPY", "d": "USD to JPY" }
-                        ]
-                    },
-                    {
-                        "title": "Futures",
-                        "symbols": [
-                            { "s": "BMFBOVESPA:ISP1!", "d": "S&P 500 Index Futures" },
-                            { "s": "PYTH:WTI3!", "d": "WTI CRUDE OIL" }
-                        ]
-                    },
-                    {
-                        "title": "Bonds",
-                        "symbols": [
-                            { "s": "EUREX:FGBL1!", "d": "Euro Bund" },
-                            { "s": "EUREX:FBTP1!", "d": "Euro BTP" }
-                        ]
                     }
                 ]
             }
             </script>
+        </div>
+
+        <!-- Finnhub ETF Holdings Widget -->
+        <div class="widget">
+            <iframe width="100%" frameBorder="0"
+                    height="300px"
+                    src="https://widget.finnhub.io/widgets/etf-holdings?symbol=spy&theme=light" 
+                    title="SPY Holdings Data by Finnhub Stock API">
+            </iframe>
         </div>
 
         <!-- Twitter Feed (Walter Bloomberg) -->
