@@ -35,7 +35,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 
-  <div id="marketPulseContainer">
+ <div id="marketPulseContainer">
     <!-- Left Side: Ticker List -->
     <div id="tickerSection">
         <input type="text" id="searchTicker" placeholder="Search for a stock..." />
@@ -45,19 +45,20 @@
 
     <!-- Right Side: Widgets -->
     <div id="widgetSection">
-        <!-- Finnhub Widget -->
-        <div style="border: 1px solid #e0e3eb; height: 100%; width: 100%">
+        <h2>Market Insights</h2>
+        <div class="widget">
             <iframe width="100%" frameBorder="0"
-                    height="100%"
+                    height="300px"
                     src="https://widget.finnhub.io/widgets/etf-holdings?symbol=spy&theme=light" 
                     title="SPY Holdings Data by Finnhub Stock API">
             </iframe>
         </div>
-        <div style="width: 100%; text-align: center; margin-top:10px;">
+        <div style="text-align: center; margin-top:10px;">
             SPY Holdings Data by <a href="https://finnhub.io/" target="_blank" style="color: #1db954;">Finnhub Stock API</a>
         </div>
     </div>
 </div>
+
 
 </body>
 </html>
