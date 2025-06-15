@@ -1,69 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MarketProEdge - Volume Profile Trading Levels</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MarketProEdge - Uncover Market Insights</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Header with navigation -->
   <header>
     <div class="logo">MarketProEdge</div>
     <nav>
-      <a href="#">Home</a>
-      <a href="#">Features</a>
-      <a href="signals.html">Market Pulse</a>
-      <a href="#">Pricing</a>
-      <a href="#">Login</a>
+      <a href="index.html">Home</a>
+      <a href="analysis.html">Analysis</a>
+      <a href="news.html">News</a>
+      <a href="login.html">Login</a>
     </nav>
   </header>
-
-  <section class="hero">
-    <h1>Daily Volume Profile Trading Levels for Every Ticker</h1>
-    <p>MarketProEdge provides key insights like gap detection, price movement and high-volume clusters – updated daily so you're never behind the tape.</p>
-    <button class="btn-primary">Start Free Trial</button>
+  
+  <!-- Hero Section -->
+  <section id="hero">
+    <h1>MarketProEdge: Uncover Market Insights That Drive Smarter Decisions</h1>
+    <p>Get real-time analysis of volume profiles, RSI trends, moving averages, and curated market news—all at your fingertips.</p>
+    <a href="signup.html" class="cta-button">Start Your Free Analysis</a>
   </section>
-
-  <section class="features">
-    <div class="feature">
-      <h3>Gap Detection</h3>
-      <p>See unfilled gaps above or below price for every stock.</p>
+  
+  <!-- Snapshot / Key Metrics -->
+  <section id="metrics">
+    <div class="metric-card">
+      <h2>Volume Profile Insights</h2>
+      <!-- Embed dynamic chart for volume profile -->
+      <div id="volumeChart"></div>
     </div>
-    <div class="feature">
-      <h3>Price Movement</h3>
-      <p>Monitor shifts in the central price to spot momentum early.</p>
+    <div class="metric-card">
+      <h2>RSI Overview</h2>
+      <!-- Mini-RSI widget -->
+      <div id="rsiWidget"></div>
     </div>
-    <div class="feature">
-      <h3>Volume Clusters</h3>
-      <p>Get alerts on high-volume areas that may act as support or resistance.</p>
-    </div>
-  </section>
-
-  <section class="pricing">
-    <h2>Choose Your Plan</h2>
-    <div class="price-card">
-      <h3>$19 / Month</h3>
-      <ul>
-        <li>Daily Trading Levels</li>
-        <li>1 Watchlist</li>
-        <li>Email Support</li>
-      </ul>
-      <button>Subscribe</button>
-    </div>
-    <div class="price-card">
-      <h3>$30 / Month</h3>
-      <ul>
-        <li>Daily Trading Levels</li>
-        <li>Unlimited Watchlists</li>
-        <li>Email + SMS Alerts</li>
-      </ul>
-      <button>Subscribe</button>
+    <div class="metric-card">
+      <h2>Simple Moving Averages</h2>
+      <!-- Mini-SMA widget -->
+      <div id="smaWidget"></div>
     </div>
   </section>
-
-
+  
+  <!-- Featured Analysis & News -->
+  <section id="featured">
+    <div class="analysis-preview">
+      <h2>Today's Top Insights</h2>
+      <!-- Preview cards for analysis -->
+    </div>
+    <div class="news-feed">
+      <h2>USA Stock Market News</h2>
+      <!-- TradingView or custom news feed integration -->
+    </div>
+  </section>
+  
+  <!-- Footer / How It Works -->
   <footer>
-    &copy; 2025 MarketProEdge. All rights reserved.
+    <p>&copy; 2025 MarketProEdge | <a href="about.html">Learn more about our methodology</a></p>
   </footer>
+  
+  <script src="script.js"></script>
 </body>
 </html>
