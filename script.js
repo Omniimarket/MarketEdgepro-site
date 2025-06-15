@@ -2,56 +2,42 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("Script.js is running on signals page.");
 
   // Fetch the JSON file (using a relative path)
-  fetch("./marketproedge_signals.json")
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("Network response was not okay: " + response.statusText);
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log("Fetched JSON Data:", data);
-      
-      // Get the container for ticker boxes
-      const tickerContainer = document.getElementById("tickerContainer");
-      tickerContainer.innerHTML = ""; // Clear any existing content
+fetch("marketData.json")
+  .then(response => response.json())
+  .then(data => {
+    const tickerContainer = document.getElementById("tickerContainer");
+    tickerContainer.innerHTML = ""; // Clear previous content
 
-      // Iterate over each ticker
-      Object.keys(data).forEach(ticker => {
-        const info = data[ticker];
-        console.log("Processing ticker:", ticker, info);
+    Object.keys(data).forEach(ticker => {
+      const info = data[ticker];
 
-        // Skip if data is empty (optional)
-        if (Object.keys(info).length === 0) {
-          console.warn(`No data available for ${ticker}.`);
-          return;
-        }
+      // Determine trend color
+      const trendColor = info.RSI > 60 ? "green" : info.RSI < 40 ? "red" : "gray";
 
-        // Create a new ticker box element
-        const box = document.createElement("div");
-        box.classList.add("ticker-box");
-
-        // Populate the box with information and a button to view the chart
-        box.innerHTML = `
+      // Create ticker card
+      const box = document.createElement("div");
+      box.classList.add("ticker-box");
+      box.setAttribute("data-symbol", ticker);
+      box.innerHTML = `
+        <div class="ticker-header">
           <h3>${ticker}</h3>
-          <p><strong>Point of Control (1H):</strong> ${info.POC_1h ?? "No Data"}</p>
-          <p><strong>Upper Trading Level (1H):</strong> ${info.VAH_1h ?? "No Data"}</p>
-          <p><strong>Lower Trading Level (1H):</strong> ${info.VAL_1h ?? "No Data"}</p>
-          <p><strong>Point of Control (Daily):</strong> ${info.POC_1day ?? "No Data"}</p>
-          <p><strong>Upper Trading Level (Daily):</strong> ${info.VAH_1day ?? "No Data"}</p>
-          <p><strong>Lower Trading Level (Daily):</strong> ${info.VAL_1day ?? "No Data"}</p>
-          <button class="view-chart">View Chart</button>
-        `;
+          <span class="trend-indicator" style="background-color: ${trendColor};"></span>
+        </div>
+        <p><strong>Point of Control:</strong> ${info.POC}</p>
+        <p><strong>RSI:</strong> ${info.RSI}</p>
+        <p><strong>Moving Average:</strong> ${info.SMA}</p>
+        <button class="view-details">View Details</button>
+      `;
 
-        // Add an event listener to the button to open the modal with the chart for that ticker
-        box.querySelector("button.view-chart").addEventListener("click", function () {
-          drawChart(ticker, info);
-          openModal();
-        });
-
-        // Append the box to the container
-        tickerContainer.appendChild(box);
+      // Expand details on button click
+      box.querySelector(".view-details").addEventListener("click", function () {
+        alert(`More details for ${ticker}: Volume - ${info.Volume}, Trend - ${info.Trend}`);
       });
+
+      tickerContainer.appendChild(box);
+    });
+  });
+
     })
     .catch(error => {
       console.error("❌ Error loading signals:", error);
