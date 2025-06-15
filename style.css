@@ -225,3 +225,22 @@ footer {
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
+#marketPulseContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Left Side: Ticker Section */
+#tickerSection {
+    flex: 2;
+}
+
+/* Right Side: Widget Section */
+#widgetSection {
+    flex: 1;
+    max-width: 300px; /* Adjust width as needed */
+}
+
